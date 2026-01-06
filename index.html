@@ -3,14 +3,470 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ISRRA-Q | Bilingual Likert Questionnaire</title>
+  <title>ISRRA-Q | Risk Profile & Action Plan</title>
+  <meta name="description" content="ISRRA-Q questionnaire. Bilingual. PDF & Word Export." />
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    :root{
+      --bg: #0b1220;
+      --panel: #101a2e;
+      --card: #0f2233;
+      --muted: rgba(255,255,255,.72);
+      --text: rgba(255,255,255,.92);
+      --accent: #4fd1c5;
+      --accent2: #60a5fa;
+      --warn: #f59e0b;
+      --bad: #fb7185;
+      --ok: #34d399;
+      --shadow: 0 12px 35px rgba(0,0,0,.35);
+      --radius: 16px;
+      --radius2: 22px;
+      --ring: 0 0 0 3px rgba(79,209,197,.25);
+    }
+
+    *{ box-sizing: border-box; }
+    html,body{ height: 100%; }
+    body{
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, "Noto Sans", system-ui, sans-serif;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* --- HERO SECTION --- */
+    .hero-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: radial-gradient(circle at 50% 30%, #1a2c4e 0%, #0b1220 70%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+      transition: opacity 0.6s ease, visibility 0.6s;
+    }
+    .hero-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .hero-content {
+      max-width: 600px;
+      animation: fadeIn 1s ease-out;
+    }
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #4fd1c5, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0 0 20px;
+      line-height: 1.1;
+    }
+    .hero-text {
+      font-size: 1.2rem;
+      color: var(--muted);
+      margin-bottom: 40px;
+      font-weight: 300;
+    }
+    .hero-btn {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 16px 40px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(79,209,197,0.4);
+      transition: transform 0.2s;
+    }
+    .hero-btn:hover { transform: scale(1.05); }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- MAIN APP --- */
+    .wrap{
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px 80px;
+      opacity: 0; /* Hidden initially until hero closes */
+      transition: opacity 1s ease;
+    }
+    .wrap.visible { opacity: 1; }
+
+    header{
+      background: rgba(16,26,46,.9);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius2);
+      padding: 20px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+    }
+
+    .brand h1 { font-size: 1.2rem; margin: 0; }
+    .brand p { font-size: 0.85rem; color: var(--muted); margin: 4px 0 0; }
+
+    .controls{ margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn{
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(79,209,197,.3), rgba(96,165,250,.3));
+      border-color: rgba(79,209,197,.3);
+    }
+    .btn:hover{ background: rgba(255,255,255,.1); }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius2);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .card h2 { margin-top: 0; font-size: 1.1rem; }
+    .hint { color: var(--muted); font-size: 0.9rem; }
+
+    /* Dimensions Grid */
+    .dims { display: grid; gap: 16px; }
+    @media(min-width: 768px) { .dims { grid-template-columns: 1fr 1fr; } }
+    
+    .dim {
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .dim-head { display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 700; }
+    .dim-code { font-size: 0.75rem; background: rgba(255,255,255,.1); padding: 2px 8px; border-radius: 10px; }
+
+    .item { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.05); }
+    .item-q { font-size: 0.9rem; margin-bottom: 6px; }
+
+    /* Likert */
+    .likert { display: flex; justify-content: space-between; gap: 4px; }
+    .opt { 
+      flex: 1; 
+      text-align: center; 
+      background: rgba(255,255,255,.05); 
+      border-radius: 8px; 
+      cursor: pointer; 
+      padding: 6px 0; 
+      font-size: 0.8rem;
+      transition: 0.2s;
+    }
+    .opt:hover { background: rgba(255,255,255,.1); }
+    input[type="radio"] { display: none; }
+    input[type="radio"]:checked + div { font-weight: bold; color: var(--accent); }
+    .opt:has(input:checked) { background: rgba(79,209,197,.15); border: 1px solid rgba(79,209,197,.3); }
+
+    .anchors { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
+
+    /* Progress Bar */
+    .progress-wrap { margin-top: 10px; display: flex; align-items: center; gap: 10px; }
+    .progress { flex: 1; height: 6px; background: rgba(255,255,255,.1); border-radius: 10px; overflow: hidden; }
+    .bar { height: 100%; width: 0%; background: var(--accent); transition: width 0.3s; }
+    .progress-txt { font-size: 0.75rem; color: var(--muted); }
+
+    /* Results Section */
+    .results { display: none; animation: slideUp 0.5s ease; }
+    .results.show { display: block; }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    .kpi-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); margin-bottom: 20px; }
+    .kpi-box { 
+      background: rgba(0,0,0,.2); 
+      padding: 12px; 
+      border-radius: 12px; 
+      border: 1px solid rgba(255,255,255,.05); 
+      text-align: center;
+    }
+    .kpi-val { font-size: 1.5rem; font-weight: 800; margin: 4px 0; }
+    .tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; display: inline-block; }
+    .tag.H { background: rgba(52,211,153,.2); color: #34d399; }
+    .tag.L { background: rgba(251,113,133,.2); color: #fb7185; }
+    .tag.M { background: rgba(245,158,11,.2); color: #fbbf24; }
+
+    .profile-block { 
+      background: linear-gradient(180deg, rgba(79,209,197,.05), transparent); 
+      border: 1px solid var(--accent); 
+      padding: 20px; 
+      border-radius: 16px; 
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .big-code { font-size: 2.5rem; font-family: monospace; letter-spacing: 4px; font-weight: 700; color: var(--accent); margin: 10px 0; }
+
+    .input-group { margin-bottom: 15px; }
+    .input-field { 
+      width: 100%; 
+      padding: 10px; 
+      border-radius: 8px; 
+      border: 1px solid rgba(255,255,255,.2); 
+      background: rgba(0,0,0,.3); 
+      color: white; 
+    }
+
+    /* Print/PDF Specifics */
+    .print-only { display: none; }
+  </style>
 </head>
+
 <body>
-<p>ISRRA-Q updated file placeholder. Full UI included in previous step.</p>
-</body>
-</html>
+
+  <div class="hero-screen" id="hero">
+    <div class="hero-content">
+      <h1 class="hero-title" id="h_title">Το Ρίσκο είναι Αφήγηση</h1>
+      <p class="hero-text" id="h_text">
+        Κάθε μέρα παίρνεις αποφάσεις υπό πίεση. Κάποιες φορές το ένστικτο σε σώζει, άλλες σε παγιδεύει. 
+        Το εργαλείο ISRRA δεν σε βαθμολογεί. Σου δείχνει τον "κώδικά" σου. 
+        Πώς αντιλαμβάνεσαι τον κίνδυνο; Πώς αντιδράς όταν όλα είναι αβέβαια;
+      </p>
+      <button class="hero-btn" id="startBtn">START</button>
+    </div>
+  </div>
+
+  <div class="wrap" id="appWrap">
+    <header>
+      <div class="brand">
+        <h1>ISRRA-Q | Profile & Action</h1>
+        <p id="subTitle">Ερωτηματολόγιο Αντίληψης Ρίσκου (Bilingual)</p>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress"><div class="bar" id="bar"></div></div>
+        <span class="progress-txt" id="progTxt">0/50</span>
+      </div>
+      <div class="controls">
+        <button class="btn" id="toggleLang">English / Ελληνικά</button>
+        <button class="btn" id="resetBtn">Reset</button>
+        <button class="btn primary" id="calcBtn">Υπολογισμός</button>
+      </div>
+    </header>
+
+    <div id="quizArea" class="card">
+      <h2 id="dimsTitle">Ερωτήσεις (Διαστάσεις)</h2>
+      <p class="hint" id="dimsHint">Απαντήστε σε όλες με ειλικρίνεια. 1=Διαφωνώ, 7=Συμφωνώ.</p>
+      <div class="dims" id="dimsContainer"></div>
+    </div>
+
+    <div id="results" class="results">
+      
+      <div class="card no-print">
+        <h2 id="finalStepTitle">Ολοκλήρωση</h2>
+        <div class="input-group">
+          <label class="hint" for="userEmail">Email (για το αρχείο PDF):</label>
+          <input type="email" id="userEmail" class="input-field" placeholder="name@company.com">
+        </div>
+        <p class="hint" id="emailHint">Συμπληρώστε το email σας. Θα εμφανιστεί στο PDF και θα ορίσει το όνομα του αρχείου.</p>
+      </div>
+
+      <div id="printArea">
+        <div class="card profile-block">
+          <h2 id="resTitle">Το Προφίλ σας</h2>
+          <div class="big-code" id="profileCode">-----</div>
+          <h3 id="profileName">...</h3>
+          <p id="profileExpl" style="font-style: italic; color: rgba(255,255,255,0.8);"></p>
+        </div>
+
+        <div class="card">
+          <h2 id="scoresTitle">Αναλυτική Βαθμολογία</h2>
+          <div class="kpi-grid" id="kpiGrid"></div>
+        </div>
+
+        <div class="card">
+          <h2 id="planTitle">SARIM Micro-Plan</h2>
+          <p class="hint" id="planIntro">Βάσει του προφίλ σας, προτείνεται το εξής πλάνο 14 ημερών:</p>
+          <div style="background: rgba(255,255,255,.05); padding: 15px; border-radius: 10px; margin-top:10px;">
+            <p id="microPlanBody" style="white-space: pre-line; line-height: 1.6;"></p>
+          </div>
+        </div>
+
+        <div class="print-only">
+          <p style="font-size: 10px; color: grey; margin-top: 20px;">Generated by ISRRA-Q. Date: <span id="printDate"></span></p>
+          <p style="font-size: 10px; color: grey;">User Email: <span id="printEmail"></span></p>
+        </div>
+      </div>
+
+      <div class="card controls no-print">
+        <button class="btn primary" id="pdfBtn">Download PDF Results</button>
+        <button class="btn" id="wordBtn">Export to Word (.doc)</button>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+  /* --- DATA & CONFIG --- */
+  const DIM = [
+    { key:"F", en:"Risk Framing", gr:"Πλαισίωση Ρίσκου", descEl:"Πώς αντιλαμβάνεσαι την απειλή.", descEn:"How you perceive threat." },
+    { key:"E", en:"Cognitive Filtering", gr:"Συναισθηματικό Φίλτρο", descEl:"Η επίδραση του στρες στην κρίση.", descEn:"Impact of stress on judgement." },
+    { key:"C", en:"Communication", gr:"Επικοινωνία", descEl:"Πώς μεταδίδεις το μήνυμα.", descEn:"How you convey the message." },
+    { key:"A", en:"Action", gr:"Δράση", descEl:"Από τη σκέψη στην πράξη.", descEn:"From thought to deed." },
+    { key:"S", en:"Safety Culture", gr:"Κουλτούρα Ασφάλειας", descEl:"Συλλογική ευθύνη.", descEn:"Shared responsibility." },
+  ];
+
+  const ITEMS = {
+    F: [
+       {en:"I tend to view risk as a challenge rather than a threat.", gr:"Τείνω να βλέπω το ρίσκο ως πρόκληση και όχι ως απειλή."},
+       {en:"When faced with uncertainty, I try to make sense of the situation before acting.", gr:"Όταν υπάρχει αβεβαιότητα, προσπαθώ πρώτα να καταλάβω την κατάσταση και μετά να δράσω."},
+       {en:"I usually relate risky situations to personal failure.", gr:"Συνήθως συνδέω τις ριψοκίνδυνες καταστάσεις με προσωπική αποτυχία."}, // R
+       {en:"I can reframe negative events into opportunities for strategic learning.", gr:"Μπορώ να ξαναπλαισιώσω αρνητικά γεγονότα ως ευκαιρίες για στρατηγική μάθηση."},
+       {en:"I often get stuck in a single narrative when thinking about risk.", gr:"Συχνά κολλάω σε μία μόνο αφήγηση όταν σκέφτομαι το ρίσκο."}, // R
+       {en:"The way I talk about risk influences how others perceive it.", gr:"Ο τρόπος που μιλάω για το ρίσκο επηρεάζει το πώς το αντιλαμβάνονται οι άλλοι."},
+       {en:"I consciously shape the story I tell myself about danger or uncertainty.", gr:"Συνειδητά διαμορφώνω την ιστορία που λέω στον εαυτό μου για κίνδυνο ή αβεβαιότητα."},
+       {en:"I believe that the framing of a problem determines its possible solutions.", gr:"Πιστεύω ότι η πλαισίωση ενός προβλήματος καθορίζει τις πιθανές λύσεις."},
+       {en:"I use language that normalises uncertainty when I explain risks to others.", gr:"Χρησιμοποιώ γλώσσα που κανονικοποιεί την αβεβαιότητα όταν εξηγώ ρίσκα σε άλλους."},
+       {en:"I experience risk as an open ended experience, not something strictly positive or negative.", gr:"Βιώνω το ρίσκο ως μια ανοιχτή εμπειρία και όχι ως κάτι αυστηρά θετικό ή αρνητικό."},
+    ],
+    E: [
+       {en:"My emotions interfere with how accurately I assess risk.", gr:"Τα συναισθήματά μου παρεμβαίνουν στο πόσο ακριβώς εκτιμώ το ρίσκο."}, // R
+       {en:"I remain calm and analytical when faced with high pressure situations.", gr:"Παραμένω ήρεμος και αναλυτικός όταν αντιμετωπίζω καταστάσεις υψηλής πίεσης."},
+       {en:"I tend to exaggerate potential negative outcomes when under stress.", gr:"Τείνω να υπερβάλλω τις πιθανές αρνητικές εκβάσεις όταν είμαι υπό στρες."}, // R
+       {en:"I can recognise when fear is distorting my perception of risk.", gr:"Μπορώ να αναγνωρίσω όταν ο φόβος αλλοιώνει την αντίληψή μου για το ρίσκο."},
+       {en:"I often assume the worst even when evidence is lacking.", gr:"Συχνά υποθέτω το χειρότερο, ακόμη και όταν λείπουν στοιχεία."}, // R
+       {en:"I notice how my mood shifts the way I interpret threats.", gr:"Παρατηρώ πώς η διάθεσή μου αλλάζει τον τρόπο που ερμηνεύω απειλές."},
+       {en:"I regulate my emotional response before making risk related decisions.", gr:"Ρυθμίζω τη συναισθηματική μου αντίδραση πριν πάρω αποφάσεις σχετικές με ρίσκο."},
+       {en:"I struggle to separate personal feelings from objective assessment.", gr:"Δυσκολεύομαι να ξεχωρίσω προσωπικά συναισθήματα από αντικειμενική εκτίμηση."}, // R
+       {en:"I feel confident in my ability to assess risk clearly under pressure.", gr:"Νιώθω σίγουρος ότι μπορώ να εκτιμώ καθαρά το ρίσκο υπό πίεση."},
+       {en:"I use mental strategies to avoid overreacting in uncertain situations.", gr:"Χρησιμοποιώ νοητικές στρατηγικές για να αποφεύγω την υπεραντίδραση σε καταστάσεις αβεβαιότητας."},
+    ],
+    C: [
+       {en:"I know how to communicate risk without causing panic.", gr:"Ξέρω πώς να επικοινωνώ το ρίσκο χωρίς να προκαλώ πανικό."},
+       {en:"I adapt my message depending on who I’m speaking to in risky situations.", gr:"Προσαρμόζω το μήνυμά μου ανάλογα με το σε ποιον μιλάω σε ριψοκίνδυνες καταστάσεις."},
+       {en:"I prefer to avoid discussing risks if they are emotionally charged.", gr:"Προτιμώ να αποφεύγω τη συζήτηση για ρίσκα όταν έχουν έντονο συναισθηματικό φορτίο."}, // R
+       {en:"I can clearly explain what makes a situation risky.", gr:"Μπορώ να εξηγήσω καθαρά τι κάνει μια κατάσταση ριψοκίνδυνη."},
+       {en:"I often hesitate to express concern about potential dangers.", gr:"Συχνά διστάζω να εκφράσω ανησυχία για πιθανούς κινδύνους."}, // R
+       {en:"I structure risk related information to help others act appropriately.", gr:"Δομώ τις πληροφορίες για το ρίσκο ώστε να βοηθώ τους άλλους να δράσουν κατάλληλα."},
+       {en:"I use storytelling when communicating risk to others.", gr:"Χρησιμοποιώ αφήγηση όταν επικοινωνώ ρίσκο σε άλλους."},
+       {en:"I am confident in my ability to express complex threats in simple terms.", gr:"Νιώθω σίγουρος ότι μπορώ να εξηγώ σύνθετες απειλές με απλούς όρους."},
+       {en:"I avoid downplaying or exaggerating risk when talking to others.", gr:"Αποφεύγω να υποβαθμίζω ή να υπερβάλλω το ρίσκο όταν μιλάω σε άλλους."},
+       {en:"I communicate risks in a way that encourages responsible action.", gr:"Επικοινωνώ τα ρίσκα με τρόπο που ενθαρρύνει υπεύθυνη δράση."},
+    ],
+    A: [
+       {en:"When I sense risk, I take action quickly and deliberately.", gr:"Όταν αντιλαμβάνομαι ρίσκο, δρω γρήγορα και σκόπιμα."},
+       {en:"I often know what to do, but delay action due to uncertainty.", gr:"Συχνά ξέρω τι πρέπει να κάνω, αλλά καθυστερώ λόγω αβεβαιότητας."}, // R
+       {en:"I act in alignment with what I understand about the situation's risk.", gr:"Δρω σε ευθυγράμμιση με αυτά που καταλαβαίνω για το ρίσκο της κατάστασης."},
+       {en:"I adapt my behaviour based on my assessment of threats.", gr:"Προσαρμόζω τη συμπεριφορά μου με βάση την εκτίμησή μου για τις απειλές."},
+       {en:"I feel paralysed when I encounter situations involving uncertainty.", gr:"Νιώθω παράλυση όταν αντιμετωπίζω καταστάσεις με αβεβαιότητα."}, // R
+       {en:"I follow through with planned actions even under pressure.", gr:"Ολοκληρώνω τις προγραμματισμένες ενέργειες ακόμη και υπό πίεση."},
+       {en:"I take steps to mitigate risk rather than ignore it.", gr:"Κάνω βήματα για να μετριάσω το ρίσκο, αντί να το αγνοώ."},
+       {en:"I find it easy to operationalise my thoughts into concrete behaviours.", gr:"Μου είναι εύκολο να μετατρέπω τις σκέψεις μου σε συγκεκριμένες συμπεριφορές."},
+       {en:"I respond to emerging threats in a methodical and structured way.", gr:"Απαντώ σε αναδυόμενες απειλές με μεθοδικό και δομημένο τρόπο."},
+       {en:"I often fail to implement what I know should be done in risky situations.", gr:"Συχνά αποτυγχάνω να εφαρμόσω αυτό που ξέρω ότι πρέπει να γίνει σε ριψοκίνδυνες καταστάσεις."}, // R
+    ],
+    S: [
+       {en:"I feel responsible for contributing to the safety of my team.", gr:"Νιώθω υπεύθυνος να συμβάλλω στην ασφάλεια της ομάδας μου."},
+       {en:"I often stay silent about safety concerns to avoid conflict.", gr:"Συχνά μένω σιωπηλός για θέματα ασφάλειας, για να αποφύγω σύγκρουση."}, // R
+       {en:"I believe my input on safety matters is valued in my environment.", gr:"Πιστεύω ότι η γνώμη μου για θέματα ασφάλειας εκτιμάται στο περιβάλλον μου."},
+       {en:"I act in ways that support a shared culture of responsibility.", gr:"Λειτουργώ με τρόπους που στηρίζουν μια κοινή κουλτούρα ευθύνης."},
+       {en:"I feel disconnected from how safety is managed around me.", gr:"Νιώθω αποσυνδεδεμένος από το πώς διαχειρίζεται η ασφάλεια γύρω μου."}, // R
+       {en:"I encourage others to speak up when they notice risk.", gr:"Ενθαρρύνω τους άλλους να μιλήσουν όταν παρατηρούν ρίσκο."},
+       {en:"I see myself as part of the broader safety system, not just an individual.", gr:"Βλέπω τον εαυτό μου ως μέρος του ευρύτερου συστήματος ασφάλειας και όχι μόνο ως άτομο."},
+       {en:"I take initiative to improve how my group handles risky situations.", gr:"Παίρνω πρωτοβουλία για να βελτιώσω το πώς η ομάδα μου χειρίζεται ριψοκίνδυνες καταστάσεις."},
+       {en:"I trust that if I report a problem, it will be taken seriously.", gr:"Εμπιστεύομαι ότι αν αναφέρω ένα πρόβλημα, θα ληφθεί σοβαρά υπόψη."},
+       {en:"I feel that my values align with the safety culture of my workplace team.", gr:"Νιώθω ότι οι αξίες μου ευθυγραμμίζονται με την κουλτούρα ασφάλειας του χώρου ή της ομάδας μου."},
+    ]
+  };
+
+  const REVERSE = { F:[3,5], E:[1,3,5,8], C:[3,5], A:[2,5,10], S:[2,5] };
+
+  const LANG = {
+    el: {
+      h_title: "Το Ρίσκο είναι Αφήγηση",
+      h_text: "Κάθε μέρα παίρνεις αποφάσεις υπό πίεση. Κάποιες φορές το ένστικτο σε σώζει, άλλες σε παγιδεύει. Το εργαλείο ISRRA δεν σε βαθμολογεί. Σου δείχνει τον 'κώδικά' σου. Πώς αντιλαμβάνεσαι τον κίνδυνο; Πώς αντιδράς όταν όλα είναι αβέβαια;",
+      start: "ΕΚΚΙΝΗΣΗ",
+      sub: "Ερωτηματολόγιο Αντίληψης Ρίσκου",
+      calc: "Υπολογισμός",
+      reset: "Reset",
+      dimsTitle: "Διαστάσεις",
+      dimsHint: "Απαντήστε σε όλες τις ερωτήσεις. 1=Διαφωνώ, 7=Συμφωνώ.",
+      resTitle: "Το Προφίλ σας",
+      planTitle: "SARIM Micro-Plan",
+      planIntro: "Προτείνεται το εξής πλάνο 14 ημερών:",
+      missing: "Παρακαλώ απαντήστε σε όλες τις ερωτήσεις.",
+      pdfBtn: "Λήψη PDF (Results)",
+      wordBtn: "Λήψη Word (.doc)",
+      emailHint: "Συμπληρώστε το email σας. Θα εμφανιστεί στο PDF.",
+      anchorL: "Διαφωνώ", anchorR: "Συμφωνώ"
+    },
+    en: {
+      h_title: "Risk is a Narrative",
+      h_text: "Every day you make decisions under pressure. Sometimes instinct saves you, sometimes it traps you. ISRRA does not grade you. It reveals your 'code'. How do you perceive danger? How do you react when everything is uncertain?",
+      start: "START",
+      sub: "Risk Perception Questionnaire",
+      calc: "Calculate",
+      reset: "Reset",
+      dimsTitle: "Dimensions",
+      dimsHint: "Answer all items. 1=Disagree, 7=Agree.",
+      resTitle: "Your Profile",
+      planTitle: "SARIM Micro-Plan",
+      planIntro: "Recommended 14-day plan:",
+      missing: "Please answer all questions.",
+      pdfBtn: "Download PDF Results",
+      wordBtn: "Download Word (.doc)",
+      emailHint: "Enter your email. It will appear on the PDF.",
+      anchorL: "Disagree", anchorR: "Agree"
+    }
+  };
+
+  /* --- STATE MANAGEMENT --- */
+  let currentLang = "el";
+  const answers = JSON.parse(localStorage.getItem("isrra_ans") || "{}");
+
+  /* --- INIT --- */
+  function init(){
+    renderHero();
+    renderDims();
+    updateProgress();
+    setLanguage(currentLang);
+  }
+
+  function renderHero(){
+    document.getElementById("startBtn").addEventListener("click", ()=>{
+      document.getElementById("hero").classList.add("hidden");
+      document.getElementById("appWrap").classList.add("visible");
+    });
+  }
+
+  function setLanguage(l){
+    currentLang = l;
+    const t = LANG[l];
+    document.documentElement.lang = l;
+    
+    // Hero
+    document.getElementById("h_title").textContent = t.h_title;
+    document.getElementById("h_text").textContent = t.h_text;
+    document.getElementById("startBtn").textContent = t.start;
+
+    // App
+    document.getElementById("subTitle").textContent = t.sub;
+    document.getElementById("calcBtn").textContent = t.calc;
+    document.getElementById("resetBtn").textContent = t.reset;
+    document.getElementById("dimsTitle").textContent = t.dimsTitle;
+    document.getElementById("dimsHint").textContent = t.dimsHint;
+    document.getElementById("resTitle").textContent = t.resTitle;
+    document.getElementById("planTitle").textContent = t.planTitle;
+    document.getElementById("planIntro").textContent = t.planIntro;
+    document.getElementById("pdfBtn").textContent = t.pdfBtn;
+    document.getElementById("wordBtn").textContent =

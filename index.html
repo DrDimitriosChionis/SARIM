@@ -1,0 +1,1243 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ISRRA-Q | Bilingual Likert Questionnaire</title>
+  <meta name="description" content="ISRRA-Q questionnaire with bilingual toggle (Greek/English), 7-point Likert scale, scoring, and profile interpretation." />
+
+  <!-- Optional web fonts. Safe fallbacks included. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* Colour psychology intent
+         Navy and blue for trust and cognitive clarity.
+         Teal for safety and regulation.
+         Warm sand for human warmth, and reduced threat.
+      */
+      --bg: #0b1220;
+      --panel: #101a2e;
+      --panel2: #0f1f2d;
+      --card: #0f2233;
+      --muted: rgba(255,255,255,.72);
+      --text: rgba(255,255,255,.92);
+      --soft: rgba(255,255,255,.10);
+      --accent: #4fd1c5;
+      --accent2: #60a5fa;
+      --warn: #f59e0b;
+      --bad: #fb7185;
+      --ok: #34d399;
+      --shadow: 0 12px 35px rgba(0,0,0,.35);
+      --radius: 16px;
+      --radius2: 22px;
+      --ring: 0 0 0 3px rgba(79,209,197,.25);
+    }
+
+    *{ box-sizing: border-box; }
+    html,body{ height: 100%; }
+    body{
+      margin: 0;
+      background: radial-gradient(1200px 700px at 15% 0%, rgba(96,165,250,.18), transparent 60%),
+                  radial-gradient(900px 600px at 85% 20%, rgba(79,209,197,.16), transparent 60%),
+                  radial-gradient(900px 700px at 45% 100%, rgba(245,158,11,.10), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+      font-family: Inter, "Noto Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height: 1.45;
+    }
+
+    a{ color: var(--accent2); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    .wrap{
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 24px 16px 60px;
+    }
+
+    header{
+      background: linear-gradient(180deg, rgba(16,26,46,.98), rgba(16,26,46,.84));
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius2);
+      padding: 22px 18px;
+      position: sticky;
+      top: 10px;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+    }
+
+    .top{
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .brand{
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .mark{
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(79,209,197,.35), rgba(96,165,250,.25));
+      border: 1px solid rgba(255,255,255,.14);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+
+    .mark svg{ opacity: .95; }
+
+    h1{
+      font-size: 20px;
+      margin: 0;
+      letter-spacing: .2px;
+    }
+
+    .sub{
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .controls{
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform .06s ease, background .15s ease, border-color .15s ease;
+    }
+    .btn:hover{ background: rgba(255,255,255,.10); }
+    .btn:active{ transform: translateY(1px); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(79,209,197,.30), rgba(96,165,250,.20));
+      border-color: rgba(79,209,197,.30);
+    }
+    .btn.primary:focus{ outline: none; box-shadow: var(--ring); }
+
+    .pill{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .grid{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(15,34,51,.92), rgba(15,34,51,.74));
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .card h2{
+      margin: 0 0 8px;
+      font-size: 17px;
+    }
+
+    .hint{
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .note{
+      margin: 12px 0 0;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.10);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .dims{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    @media (min-width: 900px){
+      .dims{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .dim{
+      background: rgba(16,26,46,.55);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius2);
+      padding: 14px;
+    }
+
+    .dim-head{
+      display: flex;
+      gap: 12px;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .dim-title{
+      margin: 0;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: .15px;
+    }
+
+    .dim-code{
+      font-size: 12px;
+      color: var(--muted);
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+    }
+
+    .item{
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+
+    .item:first-of-type{
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .item-q{
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: rgba(255,255,255,.90);
+    }
+
+    .likert{
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .opt{
+      position: relative;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      display: grid;
+      place-items: center;
+      padding: 8px 0;
+      cursor: pointer;
+      user-select: none;
+      transition: background .12s ease, border-color .12s ease;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    input[type="radio"]{
+      appearance: none;
+      position: absolute;
+      inset: 0;
+      margin: 0;
+      cursor: pointer;
+      border-radius: 14px;
+    }
+
+    .opt:hover{
+      background: rgba(255,255,255,.07);
+      border-color: rgba(96,165,250,.25);
+    }
+
+    input[type="radio"]:checked + .opt-ui{
+      color: rgba(255,255,255,.95);
+      font-weight: 700;
+    }
+
+    input[type="radio"]:checked{
+      box-shadow: var(--ring);
+      border: 1px solid rgba(79,209,197,.40);
+      background: rgba(79,209,197,.10);
+    }
+
+    .opt-ui{
+      pointer-events: none;
+      display: grid;
+      place-items: center;
+      gap: 4px;
+    }
+
+    .anchors{
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .footer-actions{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    .progress{
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+      overflow: hidden;
+      width: 260px;
+      max-width: 100%;
+    }
+
+    .bar{
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(79,209,197,.55), rgba(96,165,250,.45));
+      transition: width .25s ease;
+    }
+
+    .results{
+      margin-top: 14px;
+      display: none;
+    }
+
+    .results.show{
+      display: block;
+    }
+
+    .kpi{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 900px){
+      .kpi{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .kpi-card{
+      border-radius: var(--radius2);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,46,.55);
+      padding: 14px;
+    }
+
+    .kpi-title{
+      margin: 0;
+      font-weight: 800;
+      font-size: 13px;
+      color: rgba(255,255,255,.88);
+    }
+
+    .kpi-val{
+      margin: 8px 0 0;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: .3px;
+    }
+
+    .kpi-tag{
+      display: inline-flex;
+      margin-top: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .msg{
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .warn{
+      background: rgba(245,158,11,.12);
+      border-color: rgba(245,158,11,.22);
+      color: rgba(255,255,255,.90);
+    }
+
+    .good{
+      background: rgba(52,211,153,.10);
+      border-color: rgba(52,211,153,.18);
+      color: rgba(255,255,255,.92);
+    }
+
+    .bad{
+      background: rgba(251,113,133,.10);
+      border-color: rgba(251,113,133,.20);
+      color: rgba(255,255,255,.92);
+    }
+
+    .small{
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    .row{
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .divider{
+      height: 1px;
+      background: rgba(255,255,255,.08);
+      margin: 12px 0;
+    }
+
+    .copy{
+      width: 100%;
+      min-height: 130px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+      color: rgba(255,255,255,.88);
+      padding: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      line-height: 1.45;
+      resize: vertical;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="top">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2.2l2.5 5.1 5.6.8-4.1 4 1 5.6-5-2.7-5 2.7 1-5.6-4.1-4 5.6-.8L12 2.2z" stroke="rgba(255,255,255,.9)" stroke-width="1.4" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <h1 id="t_title">ISRRA-Q | Ερωτηματολόγιο Αντίληψης και Δράσης Ρίσκου</h1>
+            <p class="sub" id="t_sub">7βάθμια κλίμακα Likert. Δίγλωσση συμπλήρωση. Τοπική αποθήκευση μόνο στον browser.</p>
+          </div>
+        </div>
+
+        <div class="controls">
+          <span class="pill" id="t_pill">Γλώσσα. Ελληνικά</span>
+          <button class="btn" id="toggleLang" type="button">English</button>
+          <button class="btn" id="resetBtn" type="button">Reset</button>
+          <button class="btn primary" id="calcBtn" type="button">Υπολογισμός</button>
+        </div>
+      </div>
+      <div class="footer-actions">
+        <div class="row">
+          <div class="progress" aria-label="progress">
+            <div class="bar" id="bar"></div>
+          </div>
+          <span class="small" id="t_progress">0 από 50 απαντήθηκαν</span>
+        </div>
+        <span class="small" id="t_priv">Σημείωση. Δεν στέλνονται δεδομένα σε server.</span>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card" aria-labelledby="introHead">
+        <h2 id="introHead">Οδηγίες</h2>
+        <p class="hint" id="t_intro1">Διάβασε κάθε δήλωση και διάλεξε πόσο συμφωνείς. Μην σταθείς πολύ. Απάντησε με το πρώτο ώριμο ένστικτο.</p>
+        <p class="hint" id="t_intro2">Η κλίμακα είναι από 1 έως 7. Το 1 σημαίνει Διαφωνώ απόλυτα. Το 7 σημαίνει Συμφωνώ απόλυτα.</p>
+        <div class="note" id="t_intro3">
+          Αυτό το εργαλείο δεν είναι διάγνωση. Είναι χάρτης συμπεριφοράς γύρω από ρίσκο. Μπορεί να χρησιμοποιηθεί για ανάπτυξη ατόμου και ομάδας.
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 id="t_dims_title">Διαστάσεις</h2>
+        <p class="hint" id="t_dims_hint">Απάντησε σε όλες τις ερωτήσεις. Μετά πάτα Υπολογισμός.</p>
+        <div class="dims" id="dims"></div>
+      </section>
+
+      <section class="card results" id="results" aria-live="polite">
+        <h2 id="t_res_title">Αποτελέσματα</h2>
+        <p class="hint" id="t_res_hint">Θα δεις βαθμολογίες ανά διάσταση και ένα προφίλ λειτουργίας για το ρίσκο.</p>
+
+        <div class="kpi" id="kpi"></div>
+
+        <div class="divider"></div>
+
+        <div class="kpi-card">
+          <p class="kpi-title" id="t_profile_title">Κώδικας προφίλ</p>
+          <p class="kpi-val mono" id="profileCode">...</p>
+          <p class="kpi-tag" id="profileName">...</p>
+          <p class="msg" id="profileExplain"></p>
+          <div class="note" id="realPeopleNote"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="kpi-card">
+          <p class="kpi-title" id="t_sarim_title">Επόμενο βήμα με SARIM</p>
+          <p class="msg" id="t_sarim_body"></p>
+          <div class="row">
+            <button class="btn primary" id="buildPlan" type="button">Build micro plan</button>
+            <span class="small" id="planTip"></span>
+          </div>
+          <div class="note" id="planOut" style="display:none;"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="kpi-card">
+          <p class="kpi-title" id="t_export_title">Export</p>
+          <p class="msg" id="t_export_hint">Μπορείς να κάνεις copy το JSON, για να το περάσεις σε αρχείο ή σε dashboard.</p>
+          <textarea class="copy" id="exportBox" readonly></textarea>
+          <div class="row" style="margin-top:10px;">
+            <button class="btn" id="copyBtn" type="button">Copy</button>
+            <button class="btn" id="downloadBtn" type="button">Download JSON</button>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="note small" id="t_refs">
+          Ενδεικτική θεωρητική βάση. Prospect theory, risk perception, social amplification of risk, psychological safety, και safety climate.
+        </div>
+      </section>
+    </div>
+  </div>
+
+<script>
+  const SCALE = [1,2,3,4,5,6,7];
+
+  const TXT = {
+    el: {
+      title: "ISRRA-Q | Ερωτηματολόγιο Αντίληψης και Δράσης Ρίσκου",
+      sub: "7βάθμια κλίμακα Likert. Δίγλωσση συμπλήρωση. Τοπική αποθήκευση μόνο στον browser.",
+      pill: "Γλώσσα. Ελληνικά",
+      toggle: "English",
+      reset: "Reset",
+      calc: "Υπολογισμός",
+      progress: (a,b)=> `${a} από ${b} απαντήθηκαν`,
+      priv: "Σημείωση. Δεν στέλνονται δεδομένα σε server.",
+      introH: "Οδηγίες",
+      intro1: "Διάβασε κάθε δήλωση και διάλεξε πόσο συμφωνείς. Μην σταθείς πολύ. Απάντησε με το πρώτο ώριμο ένστικτο.",
+      intro2: "Η κλίμακα είναι από 1 έως 7. Το 1 σημαίνει Διαφωνώ απόλυτα. Το 7 σημαίνει Συμφωνώ απόλυτα.",
+      intro3: "Αυτό το εργαλείο δεν είναι διάγνωση. Είναι χάρτης συμπεριφοράς γύρω από ρίσκο. Μπορεί να χρησιμοποιηθεί για ανάπτυξη ατόμου και ομάδας.",
+      dimsTitle: "Διαστάσεις",
+      dimsHint: "Απάντησε σε όλες τις ερωτήσεις. Μετά πάτα Υπολογισμός.",
+      anchors: { left: "Διαφωνώ απόλυτα", right: "Συμφωνώ απόλυτα" },
+      resTitle: "Αποτελέσματα",
+      resHint: "Θα δεις βαθμολογίες ανά διάσταση και ένα προφίλ λειτουργίας για το ρίσκο.",
+      profileTitle: "Κώδικας προφίλ",
+      mixed: "Μικτό",
+      high: "Υψηλό",
+      low: "Χαμηλό",
+      missing: "Λείπουν απαντήσεις. Συμπλήρωσε όλα τα items πριν από τον υπολογισμό.",
+      sarimTitle: "Επόμενο βήμα με SARIM",
+      sarimBody: "Διάβασε πρώτα το κρυφό κόστος. Μετά διάλεξε μία μόνο μικρή συμπεριφορά. Εφάρμοσέ την για 14 ημέρες. Μετά μέτρα ξανά.",
+      buildPlan: "Build micro plan",
+      planTip: "Θα δημιουργηθεί μικρό πλάνο 14 ημερών.",
+      exportTitle: "Export",
+      exportHint: "Μπορείς να κάνεις copy το JSON, για να το περάσεις σε αρχείο ή σε dashboard.",
+      copy: "Copy",
+      dl: "Download JSON",
+      refs: "Ενδεικτική θεωρητική βάση. Prospect theory, risk perception, social amplification of risk, psychological safety, και safety climate.",
+      peopleNote: "Σημείωση. Δεν εμφανίζονται πραγματικά πρόσωπα ως ταμπέλες. Χρησιμοποιούνται μόνο ουδέτερες περιγραφές και ρόλοι, ώστε το αποτέλεσμα να μένει δίκαιο."
+    },
+    en: {
+      title: "ISRRA-Q | Risk Sensemaking and Action Questionnaire",
+      sub: "7-point Likert scale. Bilingual completion. Local browser storage only.",
+      pill: "Language: English",
+      toggle: "Ελληνικά",
+      reset: "Reset",
+      calc: "Calculate",
+      progress: (a,b)=> `${a} of ${b} answered`,
+      priv: "Note: No data is sent to a server.",
+      introH: "Instructions",
+      intro1: "Read each statement and select how much you agree. Do not overthink it. Answer with your first mature instinct.",
+      intro2: "The scale is 1 to 7. 1 means Strongly disagree. 7 means Strongly agree.",
+      intro3: "This tool is not a diagnosis. It is a behavioural map around risk. It can support individual and team development.",
+      dimsTitle: "Dimensions",
+      dimsHint: "Answer all items, then press Calculate.",
+      anchors: { left: "Strongly disagree", right: "Strongly agree" },
+      resTitle: "Results",
+      resHint: "You will see dimension scores and a functional risk profile.",
+      profileTitle: "Profile code",
+      mixed: "Mixed",
+      high: "High",
+      low: "Low",
+      missing: "Some answers are missing. Please complete all items before calculating.",
+      sarimTitle: "Next step with SARIM",
+      sarimBody: "Read the hidden cost first. Then choose one small behaviour. Apply it for 14 days. Then measure again.",
+      buildPlan: "Build micro plan",
+      planTip: "A 14-day micro plan will be generated.",
+      exportTitle: "Export",
+      exportHint: "Copy the JSON if you want to store it in a file or dashboard.",
+      copy: "Copy",
+      dl: "Download JSON",
+      refs: "Indicative theoretical base: prospect theory, risk perception, social amplification of risk, psychological safety, and safety climate.",
+      peopleNote: "Note: No real people are used as labels. Only neutral descriptions and roles are shown, so the result stays fair."
+    }
+  };
+
+  const DIM = [
+    { key:"F", en:"Risk Framing", gr:"Πλαισίωση Ρίσκου",
+      enDesc:"How you interpret risk and assign meaning.",
+      grDesc:"Πώς δίνεις νόημα στο ρίσκο και πώς χτίζεις αφήγηση."
+    },
+    { key:"E", en:"Cognitive Emotional Filtering", gr:"Γνωστικο Συναισθηματικό Φιλτράρισμα",
+      enDesc:"How emotion, stress, and bias shape your judgement.",
+      grDesc:"Πώς το στρες, το συναίσθημα και οι μεροληψίες αλλάζουν την κρίση."
+    },
+    { key:"C", en:"Risk Communication Strategy", gr:"Στρατηγική Επικοινωνίας Ρίσκου",
+      enDesc:"How you express and share risk information.",
+      grDesc:"Πώς μιλάς για το ρίσκο και πώς περνάς σήμα στους άλλους."
+    },
+    { key:"A", en:"Behavioural Anchoring", gr:"Συμπεριφορική Αγκύρωση",
+      enDesc:"How risk awareness becomes consistent action.",
+      grDesc:"Πώς η επίγνωση ρίσκου γίνεται πράξη με συνέπεια."
+    },
+    { key:"S", en:"Safety Culture Engagement", gr:"Εμπλοκή σε Κουλτούρα Ασφάλειας",
+      enDesc:"How you participate in a shared safety system.",
+      grDesc:"Πώς συμμετέχεις σε κουλτούρα αναφοράς και μάθησης."
+    },
+  ];
+
+  const ITEMS = {
+    F: [
+      {en:"I tend to view risk as a challenge rather than a threat.", gr:"Τείνω να βλέπω το ρίσκο ως πρόκληση και όχι ως απειλή."},
+      {en:"When faced with uncertainty, I try to make sense of the situation before acting.", gr:"Όταν υπάρχει αβεβαιότητα, προσπαθώ πρώτα να καταλάβω την κατάσταση και μετά να δράσω."},
+      {en:"I usually relate risky situations to personal failure.", gr:"Συνήθως συνδέω τις ριψοκίνδυνες καταστάσεις με προσωπική αποτυχία."},            // reverse
+      {en:"I can reframe negative events into opportunities for strategic learning.", gr:"Μπορώ να ξαναπλαισιώσω αρνητικά γεγονότα ως ευκαιρίες για στρατηγική μάθηση."},
+      {en:"I often get stuck in a single narrative when thinking about risk.", gr:"Συχνά κολλάω σε μία μόνο αφήγηση όταν σκέφτομαι το ρίσκο."},        // reverse
+      {en:"The way I talk about risk influences how others perceive it.", gr:"Ο τρόπος που μιλάω για το ρίσκο επηρεάζει το πώς το αντιλαμβάνονται οι άλλοι."},
+      {en:"I consciously shape the story I tell myself about danger or uncertainty.", gr:"Συνειδητά διαμορφώνω την ιστορία που λέω στον εαυτό μου για κίνδυνο ή αβεβαιότητα."},
+      {en:"I believe that the framing of a problem determines its possible solutions.", gr:"Πιστεύω ότι η πλαισίωση ενός προβλήματος καθορίζει τις πιθανές λύσεις."},
+      {en:"I use language that normalises uncertainty when I explain risks to others.", gr:"Χρησιμοποιώ γλώσσα που κανονικοποιεί την αβεβαιότητα όταν εξηγώ ρίσκα σε άλλους."},
+      {en:"I experience risk as an open ended experience, not something strictly positive or negative.", gr:"Βιώνω το ρίσκο ως μια ανοιχτή εμπειρία και όχι ως κάτι αυστηρά θετικό ή αρνητικό."},
+    ],
+    E: [
+      {en:"My emotions interfere with how accurately I assess risk.", gr:"Τα συναισθήματά μου παρεμβαίνουν στο πόσο ακριβώς εκτιμώ το ρίσκο."},        // reverse
+      {en:"I remain calm and analytical when faced with high pressure situations.", gr:"Παραμένω ήρεμος και αναλυτικός όταν αντιμετωπίζω καταστάσεις υψηλής πίεσης."},
+      {en:"I tend to exaggerate potential negative outcomes when under stress.", gr:"Τείνω να υπερβάλλω τις πιθανές αρνητικές εκβάσεις όταν είμαι υπό στρες."}, // reverse
+      {en:"I can recognise when fear is distorting my perception of risk.", gr:"Μπορώ να αναγνωρίσω όταν ο φόβος αλλοιώνει την αντίληψή μου για το ρίσκο."},
+      {en:"I often assume the worst even when evidence is lacking.", gr:"Συχνά υποθέτω το χειρότερο, ακόμη και όταν λείπουν στοιχεία."},               // reverse
+      {en:"I notice how my mood shifts the way I interpret threats.", gr:"Παρατηρώ πώς η διάθεσή μου αλλάζει τον τρόπο που ερμηνεύω απειλές."},
+      {en:"I regulate my emotional response before making risk related decisions.", gr:"Ρυθμίζω τη συναισθηματική μου αντίδραση πριν πάρω αποφάσεις σχετικές με ρίσκο."},
+      {en:"I struggle to separate personal feelings from objective assessment.", gr:"Δυσκολεύομαι να ξεχωρίσω προσωπικά συναισθήματα από αντικειμενική εκτίμηση."}, // reverse
+      {en:"I feel confident in my ability to assess risk clearly under pressure.", gr:"Νιώθω σίγουρος ότι μπορώ να εκτιμώ καθαρά το ρίσκο υπό πίεση."},
+      {en:"I use mental strategies to avoid overreacting in uncertain situations.", gr:"Χρησιμοποιώ νοητικές στρατηγικές για να αποφεύγω την υπεραντίδραση σε καταστάσεις αβεβαιότητας."},
+    ],
+    C: [
+      {en:"I know how to communicate risk without causing panic.", gr:"Ξέρω πώς να επικοινωνώ το ρίσκο χωρίς να προκαλώ πανικό."},
+      {en:"I adapt my message depending on who I’m speaking to in risky situations.", gr:"Προσαρμόζω το μήνυμά μου ανάλογα με το σε ποιον μιλάω σε ριψοκίνδυνες καταστάσεις."},
+      {en:"I prefer to avoid discussing risks if they are emotionally charged.", gr:"Προτιμώ να αποφεύγω τη συζήτηση για ρίσκα όταν έχουν έντονο συναισθηματικό φορτίο."}, // reverse
+      {en:"I can clearly explain what makes a situation risky.", gr:"Μπορώ να εξηγήσω καθαρά τι κάνει μια κατάσταση ριψοκίνδυνη."},
+      {en:"I often hesitate to express concern about potential dangers.", gr:"Συχνά διστάζω να εκφράσω ανησυχία για πιθανούς κινδύνους."},              // reverse
+      {en:"I structure risk related information to help others act appropriately.", gr:"Δομώ τις πληροφορίες για το ρίσκο ώστε να βοηθώ τους άλλους να δράσουν κατάλληλα."},
+      {en:"I use storytelling when communicating risk to others.", gr:"Χρησιμοποιώ αφήγηση όταν επικοινωνώ ρίσκο σε άλλους."},
+      {en:"I am confident in my ability to express complex threats in simple terms.", gr:"Νιώθω σίγουρος ότι μπορώ να εξηγώ σύνθετες απειλές με απλούς όρους."},
+      {en:"I avoid downplaying or exaggerating risk when talking to others.", gr:"Αποφεύγω να υποβαθμίζω ή να υπερβάλλω το ρίσκο όταν μιλάω σε άλλους."},
+      {en:"I communicate risks in a way that encourages responsible action.", gr:"Επικοινωνώ τα ρίσκα με τρόπο που ενθαρρύνει υπεύθυνη δράση."},
+    ],
+    A: [
+      {en:"When I sense risk, I take action quickly and deliberately.", gr:"Όταν αντιλαμβάνομαι ρίσκο, δρω γρήγορα και σκόπιμα."},
+      {en:"I often know what to do, but delay action due to uncertainty.", gr:"Συχνά ξέρω τι πρέπει να κάνω, αλλά καθυστερώ λόγω αβεβαιότητας."},      // reverse
+      {en:"I act in alignment with what I understand about the situation's risk.", gr:"Δρω σε ευθυγράμμιση με αυτά που καταλαβαίνω για το ρίσκο της κατάστασης."},
+      {en:"I adapt my behaviour based on my assessment of threats.", gr:"Προσαρμόζω τη συμπεριφορά μου με βάση την εκτίμησή μου για τις απειλές."},
+      {en:"I feel paralysed when I encounter situations involving uncertainty.", gr:"Νιώθω παράλυση όταν αντιμετωπίζω καταστάσεις με αβεβαιότητα."},      // reverse
+      {en:"I follow through with planned actions even under pressure.", gr:"Ολοκληρώνω τις προγραμματισμένες ενέργειες ακόμη και υπό πίεση."},
+      {en:"I take steps to mitigate risk rather than ignore it.", gr:"Κάνω βήματα για να μετριάσω το ρίσκο, αντί να το αγνοώ."},
+      {en:"I find it easy to operationalise my thoughts into concrete behaviours.", gr:"Μου είναι εύκολο να μετατρέπω τις σκέψεις μου σε συγκεκριμένες συμπεριφορές."},
+      {en:"I respond to emerging threats in a methodical and structured way.", gr:"Απαντώ σε αναδυόμενες απειλές με μεθοδικό και δομημένο τρόπο."},
+      {en:"I often fail to implement what I know should be done in risky situations.", gr:"Συχνά αποτυγχάνω να εφαρμόσω αυτό που ξέρω ότι πρέπει να γίνει σε ριψοκίνδυνες καταστάσεις."}, // reverse
+    ],
+    S: [
+      {en:"I feel responsible for contributing to the safety of my team.", gr:"Νιώθω υπεύθυνος να συμβάλλω στην ασφάλεια της ομάδας μου."},
+      {en:"I often stay silent about safety concerns to avoid conflict.", gr:"Συχνά μένω σιωπηλός για θέματα ασφάλειας, για να αποφύγω σύγκρουση."},      // reverse
+      {en:"I believe my input on safety matters is valued in my environment.", gr:"Πιστεύω ότι η γνώμη μου για θέματα ασφάλειας εκτιμάται στο περιβάλλον μου."},
+      {en:"I act in ways that support a shared culture of responsibility.", gr:"Λειτουργώ με τρόπους που στηρίζουν μια κοινή κουλτούρα ευθύνης."},
+      {en:"I feel disconnected from how safety is managed around me.", gr:"Νιώθω αποσυνδεδεμένος από το πώς διαχειρίζεται η ασφάλεια γύρω μου."},       // reverse
+      {en:"I encourage others to speak up when they notice risk.", gr:"Ενθαρρύνω τους άλλους να μιλήσουν όταν παρατηρούν ρίσκο."},
+      {en:"I see myself as part of the broader safety system, not just an individual.", gr:"Βλέπω τον εαυτό μου ως μέρος του ευρύτερου συστήματος ασφάλειας και όχι μόνο ως άτομο."},
+      {en:"I take initiative to improve how my group handles risky situations.", gr:"Παίρνω πρωτοβουλία για να βελτιώσω το πώς η ομάδα μου χειρίζεται ριψοκίνδυνες καταστάσεις."},
+      {en:"I trust that if I report a problem, it will be taken seriously.", gr:"Εμπιστεύομαι ότι αν αναφέρω ένα πρόβλημα, θα ληφθεί σοβαρά υπόψη."},
+      {en:"I feel that my values align with the safety culture of my workplace team.", gr:"Νιώθω ότι οι αξίες μου ευθυγραμμίζονται με την κουλτούρα ασφάλειας του χώρου ή της ομάδας μου."},
+    ]
+  };
+
+  const REVERSE = {
+    F: [3,5],
+    E: [1,3,5,8],
+    C: [3,5],
+    A: [2,5,10],
+    S: [2,5],
+  };
+
+  const PROF = {
+    stateBlurb: {
+      F: {
+        H: { el:"Βλέπεις το ρίσκο ως πεδίο επιλογών και μάθησης.", en:"You treat risk as a space for options and learning." },
+        L: { el:"Βλέπεις το ρίσκο ως απειλή ή ως προσωπική αποτυχία.", en:"You tend to experience risk as threat or personal failure." }
+      },
+      E: {
+        H: { el:"Ρυθμίζεις συναίσθημα πριν αποφασίσεις και κρατάς καθαρή κρίση.", en:"You regulate emotion before deciding and keep judgement clear." },
+        L: { el:"Το στρες χρωματίζει την εκτίμηση και μεγαλώνει το αρνητικό σενάριο.", en:"Stress colours judgement and magnifies negative scenarios." }
+      },
+      C: {
+        H: { el:"Επικοινωνείς ρίσκο με σαφήνεια και χωρίς δραματοποίηση.", en:"You communicate risk clearly without dramatising it." },
+        L: { el:"Αποφεύγεις τη συζήτηση ή διστάζεις να σηκώσεις σημαία.", en:"You avoid the topic or hesitate to raise a flag." }
+      },
+      A: {
+        H: { el:"Μετατρέπεις επίγνωση σε πράξη με δομή και follow through.", en:"You convert awareness into structured action and follow through." },
+        L: { el:"Αναβάλεις ή παγώνεις όταν υπάρχει αβεβαιότητα.", en:"You delay or freeze when uncertainty is present." }
+      },
+      S: {
+        H: { el:"Λειτουργείς ως μέρος συστήματος και ενθαρρύνεις speak up.", en:"You act as part of the system and encourage speak up." },
+        L: { el:"Σιωπάς ή νιώθεις αποσύνδεση από τη διαδικασία ασφάλειας.", en:"You stay silent or feel disconnected from safety processes." }
+      },
+    },
+    profit: {
+      F: { el:"Επηρεάζει την ποιότητα λύσεων και την ταχύτητα ευθυγράμμισης.", en:"Affects solution quality and alignment speed." },
+      E: { el:"Επηρεάζει το κόστος λαθών και τη σταθερότητα απόδοσης.", en:"Affects error cost and performance stability." },
+      C: { el:"Επηρεάζει τον συντονισμό και την εμπιστοσύνη.", en:"Affects coordination and trust." },
+      A: { el:"Επηρεάζει τον χρόνο κύκλου και το κόστος επανεργασίας.", en:"Affects cycle time and rework cost." },
+      S: { el:"Επηρεάζει την πρόληψη συμβάντων και τη διατήρηση προσωπικού.", en:"Affects incident prevention and retention." },
+    },
+    actions: {
+      F: {
+        H: { el:"Δώσε ρόλο σε ανάλυση σεναρίων και learning reviews.", en:"Use them in scenario work and learning reviews." },
+        L: { el:"Χτίσε κοινή γλώσσα ρίσκου και κάνε pre mortem και after action review.", en:"Build shared risk language and use pre mortems and after action reviews." }
+      },
+      E: {
+        H: { el:"Χρησιμοποίησέ τον ως calm anchor σε πιεστικά meetings.", en:"Use them as a calm anchor in high pressure settings." },
+        L: { el:"Βάλε κανόνα παύσης, buddy check και καθαρά triggers κλιμάκωσης.", en:"Add a pause rule, buddy checks, and clear escalation triggers." }
+      },
+      C: {
+        H: { el:"Δώσε ρόλο spokesperson σε δύσκολες συζητήσεις.", en:"Use them as a spokesperson for difficult risk briefings." },
+        L: { el:"Τυποποίησε risk brief και αντάμειψε την έγκαιρη αναφορά.", en:"Standardise a risk brief and reward early reporting." }
+      },
+      A: {
+        H: { el:"Δώσε ownership σε κρίσιμες εκτελέσεις και SOPs.", en:"Give ownership of critical execution and SOPs." },
+        L: { el:"Βάλε χρονικά όρια, checklists και μέτρα χρόνο από σήμα σε δράση.", en:"Set time boxes, checklists, and measure signal to action time." }
+      },
+      S: {
+        H: { el:"Δώσε ρόλο safety champion με ευθύνη κύκλου feedback.", en:"Make them a safety champion who closes the feedback loop." },
+        L: { el:"Προστάτευσε τον messenger και κλείσε τον κύκλο αναφοράς με σταθερό feedback.", en:"Protect the messenger and close reporting loops with consistent feedback." }
+      }
+    }
+  };
+
+  function round2(x){ return Math.round(x * 100) / 100; }
+
+  function getLang(){
+    return document.documentElement.lang === "el" ? "el" : "en";
+  }
+
+  function setLang(lang){
+    document.documentElement.lang = lang;
+    const t = TXT[lang];
+
+    document.getElementById("t_title").textContent = t.title;
+    document.getElementById("t_sub").textContent = t.sub;
+    document.getElementById("t_pill").textContent = t.pill;
+    document.getElementById("toggleLang").textContent = t.toggle;
+    document.getElementById("resetBtn").textContent = t.reset;
+    document.getElementById("calcBtn").textContent = t.calc;
+
+    document.getElementById("introHead").textContent = t.introH;
+    document.getElementById("t_intro1").textContent = t.intro1;
+    document.getElementById("t_intro2").textContent = t.intro2;
+    document.getElementById("t_intro3").textContent = t.intro3;
+
+    document.getElementById("t_dims_title").textContent = t.dimsTitle;
+    document.getElementById("t_dims_hint").textContent = t.dimsHint;
+
+    document.getElementById("t_res_title").textContent = t.resTitle;
+    document.getElementById("t_res_hint").textContent = t.resHint;
+    document.getElementById("t_profile_title").textContent = t.profileTitle;
+
+    document.getElementById("t_sarim_title").textContent = t.sarimTitle;
+    document.getElementById("t_sarim_body").textContent = t.sarimBody;
+    document.getElementById("buildPlan").textContent = t.buildPlan;
+    document.getElementById("planTip").textContent = t.planTip;
+
+    document.getElementById("t_export_title").textContent = t.exportTitle;
+    document.getElementById("t_export_hint").textContent = t.exportHint;
+    document.getElementById("copyBtn").textContent = t.copy;
+    document.getElementById("downloadBtn").textContent = t.dl;
+    document.getElementById("t_refs").textContent = t.refs;
+
+    document.getElementById("realPeopleNote").textContent = t.peopleNote;
+
+    render();
+    updateProgress();
+  }
+
+  function idFor(key, idx){
+    return `${key}_${idx}`;
+  }
+
+  function saveAnswer(qid, val){
+    const store = JSON.parse(localStorage.getItem("isrraq_answers") || "{}");
+    store[qid] = val;
+    localStorage.setItem("isrraq_answers", JSON.stringify(store));
+  }
+
+  function loadAnswers(){
+    return JSON.parse(localStorage.getItem("isrraq_answers") || "{}");
+  }
+
+  function clearAnswers(){
+    localStorage.removeItem("isrraq_answers");
+  }
+
+  function render(){
+    const lang = getLang();
+    const t = TXT[lang];
+    const answers = loadAnswers();
+    const root = document.getElementById("dims");
+    root.innerHTML = "";
+
+    DIM.forEach(dim => {
+      const box = document.createElement("div");
+      box.className = "dim";
+      const head = document.createElement("div");
+      head.className = "dim-head";
+
+      const title = document.createElement("p");
+      title.className = "dim-title";
+      title.textContent = `${lang === "el" ? dim.gr : dim.en}`;
+
+      const code = document.createElement("span");
+      code.className = "dim-code";
+      code.textContent = `${dim.key}`;
+
+      head.appendChild(title);
+      head.appendChild(code);
+
+      const desc = document.createElement("p");
+      desc.className = "hint";
+      desc.textContent = (lang === "el" ? dim.grDesc : dim.enDesc);
+
+      box.appendChild(head);
+      box.appendChild(desc);
+
+      const list = ITEMS[dim.key];
+      list.forEach((it, i0) => {
+        const idx = i0 + 1;
+        const qid = idFor(dim.key, idx);
+
+        const item = document.createElement("div");
+        item.className = "item";
+
+        const q = document.createElement("p");
+        q.className = "item-q";
+        q.textContent = `${idx}. ${lang === "el" ? it.gr : it.en}`;
+        item.appendChild(q);
+
+        const lik = document.createElement("div");
+        lik.className = "likert";
+        SCALE.forEach(v => {
+          const wrap = document.createElement("label");
+          wrap.className = "opt";
+
+          const radio = document.createElement("input");
+          radio.type = "radio";
+          radio.name = qid;
+          radio.value = String(v);
+          radio.checked = String(answers[qid] || "") === String(v);
+          radio.addEventListener("change", (e)=>{
+            saveAnswer(qid, Number(e.target.value));
+            updateProgress();
+          });
+
+          const ui = document.createElement("div");
+          ui.className = "opt-ui";
+          ui.innerHTML = `<div>${v}</div>`;
+
+          wrap.appendChild(radio);
+          wrap.appendChild(ui);
+          lik.appendChild(wrap);
+        });
+
+        item.appendChild(lik);
+
+        const anchors = document.createElement("div");
+        anchors.className = "anchors";
+        const left = document.createElement("span");
+        left.textContent = t.anchors.left;
+        const right = document.createElement("span");
+        right.textContent = t.anchors.right;
+        anchors.appendChild(left);
+        anchors.appendChild(right);
+        item.appendChild(anchors);
+
+        box.appendChild(item);
+      });
+
+      root.appendChild(box);
+    });
+  }
+
+  function countAnswered(){
+    const answers = loadAnswers();
+    let total = 0;
+    let answered = 0;
+    DIM.forEach(d => {
+      for(let i=1;i<=10;i++){
+        total += 1;
+        const qid = idFor(d.key, i);
+        if(answers[qid] !== undefined && answers[qid] !== null && answers[qid] !== "") answered += 1;
+      }
+    });
+    return { answered, total };
+  }
+
+  function updateProgress(){
+    const lang = getLang();
+    const t = TXT[lang];
+    const { answered, total } = countAnswered();
+    const pct = Math.round((answered / total) * 100);
+    document.getElementById("bar").style.width = `${pct}%`;
+    document.getElementById("t_progress").textContent = t.progress(answered, total);
+  }
+
+  function reverseIfNeeded(dimKey, idx, val){
+    const rev = REVERSE[dimKey] || [];
+    if(rev.includes(idx)){
+      return 8 - val;
+    }
+    return val;
+  }
+
+  function scoreDimension(dimKey, answers){
+    const vals = [];
+    for(let i=1;i<=10;i++){
+      const qid = idFor(dimKey, i);
+      const v = answers[qid];
+      if(v === undefined) return null;
+      vals.push(reverseIfNeeded(dimKey, i, Number(v)));
+    }
+    const mean = vals.reduce((a,b)=>a+b,0) / vals.length;
+    return mean;
+  }
+
+  function stateFromMean(mean){
+    if(mean >= 5) return "H";
+    if(mean <= 3) return "L";
+    return "M";
+  }
+
+  function labelState(st, lang){
+    const t = TXT[lang];
+    if(st === "H") return t.high;
+    if(st === "L") return t.low;
+    return t.mixed;
+  }
+
+  function profileCodeFromStates(states){
+    const letters = ["F","E","C","A","S"];
+    return letters.map(k => {
+      const st = states[k];
+      if(st === "H") return k;
+      if(st === "L") return k.toLowerCase();
+      return k + "?";
+    }).join("");
+  }
+
+  function allAlternatives(states){
+    const letters = ["F","E","C","A","S"];
+    let codes = [""];
+    letters.forEach(k => {
+      const st = states[k];
+      if(st === "H") codes = codes.map(c => c + k);
+      else if(st === "L") codes = codes.map(c => c + k.toLowerCase());
+      else {
+        const a = codes.map(c => c + k);
+        const b = codes.map(c => c + k.toLowerCase());
+        codes = a.concat(b);
+      }
+    });
+    return codes;
+  }
+
+  function profileNameFromStates(states, lang){
+    const F = states.F, E = states.E, C = states.C, A = states.A, S = states.S;
+
+    function pick(map){
+      if(map[F] && map[F][E] && map[F][E][C] && map[F][E][C][A] && map[F][E][C][A][S]){
+        return map[F][E][C][A][S];
+      }
+      return null;
+    }
+
+    const el = (S==="H" ? "Ομαδικός" : "Μοναχικός");
+    const fe = (F==="H" ? "Στρατηγικός" : "Αμυντικός") + " και " + (E==="H" ? "Ψύχραιμος" : "Αντιδραστικός");
+    const ca = (C==="H" ? "Καθαρός" : "Σιωπηλός") + " " + (A==="H" ? "Εκτελεστής" : "Διστακτικός");
+    const en = (S==="H" ? "Team based" : "Solo") + ", " +
+               (F==="H" ? "Strategic" : "Defensive") + " and " + (E==="H" ? "Calm" : "Reactive") + ", " +
+               (C==="H" ? "Clear" : "Quiet") + " " + (A==="H" ? "Executor" : "Hesitant");
+
+    return lang === "el" ? `${el}, ${fe}, ${ca}` : en;
+  }
+
+  function buildProfileExplanation(states, means, lang){
+    const t = TXT[lang];
+    const parts = [];
+    const letters = ["F","E","C","A","S"];
+
+    letters.forEach(k => {
+      const st = states[k] === "M" ? (means[k] >= 4 ? "H" : "L") : states[k];
+      const bl = PROF.stateBlurb[k][st][lang];
+      const pr = PROF.profit[k][lang];
+      parts.push(`${bl} ${pr}`);
+    });
+
+    const riskParts = [];
+    if(states.A === "L") riskParts.push(lang==="el" ? "Πιθανό κρυφό κόστος είναι η καθυστέρηση." : "A likely hidden cost is delay.");
+    if(states.C === "L") riskParts.push(lang==="el" ? "Πιθανό κρυφό κόστος είναι η απώλεια σήματος." : "A likely hidden cost is signal loss.");
+    if(states.E === "L") riskParts.push(lang==="el" ? "Πιθανό κρυφό κόστος είναι η αστάθεια κρίσης." : "A likely hidden cost is judgement instability.");
+    if(states.F === "L") riskParts.push(lang==="el" ? "Πιθανό κρυφό κόστος είναι η άκαμπτη αφήγηση." : "A likely hidden cost is rigid framing.");
+    if(states.S === "L") riskParts.push(lang==="el" ? "Πιθανό κρυφό κόστος είναι χαμηλό speak up." : "A likely hidden cost is low speak up.");
+
+    const mgr = [];
+    letters.forEach(k => {
+      const st = states[k] === "M" ? "L" : states[k];
+      mgr.push(PROF.actions[k][st][lang]);
+    });
+
+    const explain = {
+      summary: parts.join(" "),
+      hidden: riskParts.length ? riskParts.join(" ") : (lang==="el" ? "Πρόσεξε υπερβολική αυτοπεποίθηση όταν όλα πάνε καλά." : "Watch overconfidence when things go well."),
+      manager: mgr.join(" "),
+    };
+
+    return explain;
+  }
+
+  function buildMicroPlan(states, means, lang){
+    const steps = [];
+    const isEl = lang === "el";
+
+    function push(a,b){
+      steps.push(isEl ? a : b);
+    }
+
+    push("Ημέρες 1 έως 3. Πιάσε σήματα. Γράψε 3 επαναλαμβανόμενα ρίσκα και 3 triggers κλιμάκωσης.", "Days 1 to 3: Capture signals. Write 3 recurring risks and 3 escalation triggers.");
+    push("Ημέρες 4 έως 7. Διάλεξε μία μικρή συμπεριφορά. Κράτα την σταθερή κάθε μέρα.", "Days 4 to 7: Choose one small behaviour. Keep it consistent daily.");
+    push("Ημέρες 8 έως 10. Κάνε μικρό review. Τι δούλεψε και τι όχι.", "Days 8 to 10: Run a short review. What worked and what did not.");
+    push("Ημέρες 11 έως 14. Κλείσε τον κύκλο. Στείλε feedback σε έναν άνθρωπο και κράτα ένα μέτρο απόδοσης.", "Days 11 to 14: Close the loop. Send feedback to one person and keep one performance metric.");
+
+    if(states.C === "L" || states.C === "M"){
+      push("Εστίαση. Κάθε μέρα γράψε 2 προτάσεις. Τι ξέρουμε και τι δεν ξέρουμε.", "Focus: Daily write 2 sentences: What we know and what we do not know.");
+    }
+    if(states.A === "L" || states.A === "M"){
+      push("Εστίαση. Βάλε χρονικό όριο 24 ωρών για την πρώτη μικρή πράξη.", "Focus: Use a 24-hour time box for the first small action.");
+    }
+    if(states.S === "L" || states.S === "M"){
+      push("Εστίαση. Ζήτησε από έναν άνθρωπο να σου πει ένα near miss. Άκου χωρίς άμυνα.", "Focus: Ask one person for a near miss. Listen without defence.");
+    }
+
+    return steps.join("<br><br>");
+  }
+
+  function calculate(){
+    const lang = getLang();
+    const t = TXT[lang];
+    const answers = loadAnswers();
+
+    const { answered, total } = countAnswered();
+    if(answered !== total){
+      alert(t.missing);
+      return;
+    }
+
+    const means = {};
+    const states = {};
+    DIM.forEach(d => {
+      const m = scoreDimension(d.key, answers);
+      means[d.key] = m;
+      states[d.key] = stateFromMean(m);
+    });
+
+    const code = profileCodeFromStates(states);
+    const alt = allAlternatives(states);
+
+    const showAlt = alt.length <= 4 && alt.some(c => c.includes("?") === false) === false; // but code has ?, alt does not
+    const profileName = profileNameFromStates(states, lang);
+    const exp = buildProfileExplanation(states, means, lang);
+
+    document.getElementById("results").classList.add("show");
+
+    const kpi = document.getElementById("kpi");
+    kpi.innerHTML = "";
+
+    DIM.forEach(d => {
+      const card = document.createElement("div");
+      card.className = "kpi-card";
+
+      const title = document.createElement("p");
+      title.className = "kpi-title";
+      title.textContent = (lang==="el" ? d.gr : d.en);
+
+      const val = document.createElement("p");
+      val.className = "kpi-val";
+      val.textContent = String(round2(means[d.key]));
+
+      const tag = document.createElement("span");
+      const st = states[d.key];
+      const label = labelState(st, lang);
+      tag.className = "kpi-tag " + (st==="H" ? "good" : (st==="L" ? "bad" : "warn"));
+      tag.textContent = label;
+
+      const msg = document.createElement("p");
+      msg.className = "msg";
+      const bl = PROF.stateBlurb[d.key][st==="M" ? (means[d.key] >= 4 ? "H":"L") : st][lang];
+      msg.textContent = bl;
+
+      const msg2 = document.createElement("p");
+      msg2.className = "msg";
+      msg2.textContent = PROF.profit[d.key][lang];
+
+      card.appendChild(title);
+      card.appendChild(val);
+      card.appendChild(tag);
+      card.appendChild(msg);
+      card.appendChild(msg2);
+
+      kpi.appendChild(card);
+    });
+
+    document.getElementById("profileCode").textContent = code;
+    document.getElementById("profileName").textContent = profileName;
+
+    let explainText = exp.summary + " " + exp.hidden + " " + (lang==="el" ? "Manager moves. " : "Manager moves: ") + exp.manager;
+    if(alt.length > 1 && alt.length <= 4){
+      const altStr = alt.join(", ");
+      explainText += " " + (lang==="el" ? `Εναλλακτικοί κώδικες λόγω μικτών τιμών. ${altStr}.` : `Alternative codes due to mixed values: ${altStr}.`);
+    }
+    if(alt.length > 4){
+      explainText += " " + (lang==="el" ? "Υπάρχουν πολλές μικτές διαστάσεις, οπότε προτίμησε να διαβάσεις ανά διάσταση." : "Many dimensions are mixed, so prefer reading per dimension.");
+    }
+
+    document.getElementById("profileExplain").textContent = explainText;
+
+    const exportObj = {
+      instrument: "ISRRA-Q",
+      scale: "1-7 Likert",
+      reverseKeyed: REVERSE,
+      means: Object.fromEntries(Object.entries(means).map(([k,v])=>[k, round2(v)])),
+      states,
+      profileCode: code,
+      profileName,
+      alternatives: alt.length <= 8 ? alt : alt.slice(0,8),
+      ts: new Date().toISOString(),
+    };
+    const json = JSON.stringify(exportObj, null, 2);
+    document.getElementById("exportBox").value = json;
+
+    document.getElementById("planOut").style.display = "none";
+    document.getElementById("planOut").innerHTML = "";
+    window.scrollTo({ top: document.getElementById("results").offsetTop - 40, behavior: "smooth" });
+  }
+
+  function resetAll(){
+    clearAnswers();
+    document.getElementById("results").classList.remove("show");
+    render();
+    updateProgress();
+  }
+
+  function copyJSON(){
+    const box = document.getElementById("exportBox");
+    box.select();
+    document.execCommand("copy");
+  }
+
+  function downloadJSON(){
+    const content = document.getElementById("exportBox").value;
+    const blob = new Blob([content], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "isrraq_results.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function onBuildPlan(){
+    const lang = getLang();
+    const answers = loadAnswers();
+    const { answered, total } = countAnswered();
+    if(answered !== total){
+      alert(TXT[lang].missing);
+      return;
+    }
+    const means = {};
+    const states = {};
+    DIM.forEach(d => {
+      const m = scoreDimension(d.key, answers);
+      means[d.key] = m;
+      states[d.key] = stateFromMean(m);
+    });
+    const out = document.getElementById("planOut");
+    out.innerHTML = buildMicroPlan(states, means, lang);
+    out.style.display = "block";
+    out.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  document.getElementById("toggleLang").addEventListener("click", ()=>{
+    setLang(getLang() === "el" ? "en" : "el");
+  });
+  document.getElementById("resetBtn").addEventListener("click", resetAll);
+  document.getElementById("calcBtn").addEventListener("click", calculate);
+  document.getElementById("copyBtn").addEventListener("click", copyJSON);
+  document.getElementById("downloadBtn").addEventListener("click", downloadJSON);
+  document.getElementById("buildPlan").addEventListener("click", onBuildPlan);
+
+  setLang("el");
+</script>
+</body>
+</html>

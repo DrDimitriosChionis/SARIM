@@ -45,7 +45,7 @@
     .hero-screen {
       position: fixed;
       inset: 0;
-      z-index: 999;
+      z-index: 9999;
       background: radial-gradient(circle at 50% 30%, #1a2c4e 0%, #0b1220 70%);
       display: flex;
       flex-direction: column;
@@ -53,13 +53,15 @@
       justify-content: center;
       padding: 20px;
       text-align: center;
-      transition: opacity 0.6s ease, visibility 0.6s;
+      transition: opacity 0.5s ease;
     }
-    .hero-screen.hidden {
+    
+    /* Class to hide hero */
+    .hero-screen.closed {
       opacity: 0;
-      visibility: hidden;
       pointer-events: none;
     }
+
     .hero-content {
       max-width: 600px;
       animation: fadeIn 1s ease-out;
@@ -93,6 +95,22 @@
     }
     .hero-btn:hover { transform: scale(1.05); }
 
+    /* Language Button on Hero */
+    .hero-lang-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    .hero-lang-btn:hover { background: rgba(255,255,255,0.2); }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -103,10 +121,14 @@
       max-width: 900px;
       margin: 0 auto;
       padding: 24px 16px 80px;
-      opacity: 0; /* Hidden initially until hero closes */
+      opacity: 0; 
       transition: opacity 1s ease;
+      display: none; /* Hidden initially */
     }
-    .wrap.visible { opacity: 1; }
+    .wrap.visible { 
+      opacity: 1; 
+      display: block; 
+    }
 
     header{
       background: rgba(16,26,46,.9);
@@ -236,6 +258,8 @@
 <body>
 
   <div class="hero-screen" id="hero">
+    <button class="hero-lang-btn" id="heroLangBtn">English</button>
+
     <div class="hero-content">
       <h1 class="hero-title" id="h_title">Το Ρίσκο είναι Αφήγηση</h1>
       <p class="hero-text" id="h_text">
@@ -258,7 +282,7 @@
         <span class="progress-txt" id="progTxt">0/50</span>
       </div>
       <div class="controls">
-        <button class="btn" id="toggleLang">English / Ελληνικά</button>
+        <button class="btn" id="toggleLang">Switch Language</button>
         <button class="btn" id="resetBtn">Reset</button>
         <button class="btn primary" id="calcBtn">Υπολογισμός</button>
       </div>
@@ -396,6 +420,8 @@
       h_title: "Το Ρίσκο είναι Αφήγηση",
       h_text: "Κάθε μέρα παίρνεις αποφάσεις υπό πίεση. Κάποιες φορές το ένστικτο σε σώζει, άλλες σε παγιδεύει. Το εργαλείο ISRRA δεν σε βαθμολογεί. Σου δείχνει τον 'κώδικά' σου. Πώς αντιλαμβάνεσαι τον κίνδυνο; Πώς αντιδράς όταν όλα είναι αβέβαια;",
       start: "ΕΚΚΙΝΗΣΗ",
+      heroBtn: "English", // Button text on Hero to switch TO English
+      toggleBtn: "English", // Button text in App
       sub: "Ερωτηματολόγιο Αντίληψης Ρίσκου",
       calc: "Υπολογισμός",
       reset: "Reset",
@@ -414,6 +440,8 @@
       h_title: "Risk is a Narrative",
       h_text: "Every day you make decisions under pressure. Sometimes instinct saves you, sometimes it traps you. ISRRA does not grade you. It reveals your 'code'. How do you perceive danger? How do you react when everything is uncertain?",
       start: "START",
+      heroBtn: "Ελληνικά", // Button text on Hero to switch TO Greek
+      toggleBtn: "Ελληνικά",
       sub: "Risk Perception Questionnaire",
       calc: "Calculate",
       reset: "Reset",
@@ -443,10 +471,30 @@
   }
 
   function renderHero(){
-    document.getElementById("startBtn").addEventListener("click", ()=>{
-      document.getElementById("hero").classList.add("hidden");
-      document.getElementById("appWrap").classList.add("visible");
+    // Hero Start Button
+    const startBtn = document.getElementById("startBtn");
+    startBtn.onclick = function() {
+      // Hide Hero
+      const hero = document.getElementById("hero");
+      hero.classList.add("closed");
+      
+      // Show App after small delay for transition
+      setTimeout(() => {
+        hero.style.display = 'none'; // Completely remove from layout
+        const app = document.getElementById("appWrap");
+        app.classList.add("visible");
+      }, 500);
+    };
+
+    // Hero Language Button
+    document.getElementById("heroLangBtn").addEventListener("click", () => {
+      toggleLanguage();
     });
+  }
+
+  function toggleLanguage(){
+    const newLang = currentLang === 'el' ? 'en' : 'el';
+    setLanguage(newLang);
   }
 
   function setLanguage(l){
@@ -454,12 +502,14 @@
     const t = LANG[l];
     document.documentElement.lang = l;
     
-    // Hero
+    // Hero Elements
     document.getElementById("h_title").textContent = t.h_title;
     document.getElementById("h_text").textContent = t.h_text;
     document.getElementById("startBtn").textContent = t.start;
+    document.getElementById("heroLangBtn").textContent = t.heroBtn;
 
-    // App
+    // App Elements
+    document.getElementById("toggleLang").textContent = t.toggleBtn;
     document.getElementById("subTitle").textContent = t.sub;
     document.getElementById("calcBtn").textContent = t.calc;
     document.getElementById("resetBtn").textContent = t.reset;
@@ -469,4 +519,241 @@
     document.getElementById("planTitle").textContent = t.planTitle;
     document.getElementById("planIntro").textContent = t.planIntro;
     document.getElementById("pdfBtn").textContent = t.pdfBtn;
-    document.getElementById("wordBtn").textContent =
+    document.getElementById("wordBtn").textContent = t.wordBtn;
+    document.getElementById("emailHint").textContent = t.emailHint;
+
+    // Re-render items to update text (questions)
+    renderDims();
+  }
+
+  function renderDims(){
+    const container = document.getElementById("dimsContainer");
+    container.innerHTML = "";
+    
+    DIM.forEach(d => {
+      const box = document.createElement("div");
+      box.className = "dim";
+      
+      const head = document.createElement("div");
+      head.className = "dim-head";
+      head.innerHTML = `<span>${currentLang==='el'?d.gr:d.en}</span> <span class="dim-code">${d.key}</span>`;
+      
+      const desc = document.createElement("div");
+      desc.className = "hint";
+      desc.textContent = currentLang==='el'?d.descEl:d.descEn;
+
+      box.appendChild(head);
+      box.appendChild(desc);
+
+      const items = ITEMS[d.key];
+      items.forEach((it, idx) => {
+        const qid = `${d.key}_${idx+1}`;
+        const row = document.createElement("div");
+        row.className = "item";
+        
+        const qText = document.createElement("p");
+        qText.className = "item-q";
+        qText.textContent = `${idx+1}. ${currentLang==='el'?it.gr:it.en}`;
+        row.appendChild(qText);
+
+        const likert = document.createElement("div");
+        likert.className = "likert";
+        
+        [1,2,3,4,5,6,7].forEach(val => {
+          const lbl = document.createElement("label");
+          lbl.className = "opt";
+          const inp = document.createElement("input");
+          inp.type = "radio";
+          inp.name = qid;
+          inp.value = val;
+          if(answers[qid] == val) inp.checked = true;
+          
+          inp.addEventListener("change", (e)=>{
+             answers[qid] = parseInt(e.target.value);
+             localStorage.setItem("isrra_ans", JSON.stringify(answers));
+             updateProgress();
+          });
+
+          const ui = document.createElement("div");
+          ui.textContent = val;
+          
+          lbl.appendChild(inp);
+          lbl.appendChild(ui);
+          likert.appendChild(lbl);
+        });
+
+        row.appendChild(likert);
+        
+        const anchors = document.createElement("div");
+        anchors.className = "anchors";
+        anchors.innerHTML = `<span>${LANG[currentLang].anchorL}</span><span>${LANG[currentLang].anchorR}</span>`;
+        row.appendChild(anchors);
+
+        box.appendChild(row);
+      });
+      
+      container.appendChild(box);
+    });
+  }
+
+  function updateProgress(){
+    const total = 50; // 5 dims * 10 items
+    const answered = Object.keys(answers).length;
+    const pct = Math.round((answered/total)*100);
+    document.getElementById("bar").style.width = pct+"%";
+    document.getElementById("progTxt").textContent = `${answered}/${total}`;
+  }
+
+  /* --- CALCULATION LOGIC --- */
+  function calculate(){
+    const totalAnswered = Object.keys(answers).length;
+    if(totalAnswered < 50){
+      alert(LANG[currentLang].missing);
+      return;
+    }
+
+    const scores = {};
+    const states = {}; 
+    
+    DIM.forEach(d => {
+      let sum = 0;
+      for(let i=1; i<=10; i++){
+        let val = answers[`${d.key}_${i}`];
+        // Reverse Logic
+        if(REVERSE[d.key].includes(i)){
+          val = 8 - val;
+        }
+        sum += val;
+      }
+      const mean = sum / 10;
+      scores[d.key] = mean;
+      // LOGIC: If mean >= 4.0 -> High (Uppercase), else Low
+      states[d.key] = mean >= 4.0 ? "H" : "L"; 
+    });
+
+    displayResults(scores, states);
+  }
+
+  function displayResults(scores, states){
+    document.getElementById("results").classList.add("show");
+    
+    // 1. Profile Code (FECAS)
+    let codeStr = "";
+    ["F","E","C","A","S"].forEach(k => {
+      codeStr += (states[k] === "H" ? k : k.toLowerCase());
+    });
+    document.getElementById("profileCode").textContent = codeStr;
+
+    // 2. Profile Name
+    const pNameEl = (states.S==="H"?"Ομαδικός":"Μοναχικός") + ", " + (states.F==="H"?"Στρατηγικός":"Αμυντικός");
+    const pNameEn = (states.S==="H"?"Team-based":"Solo") + ", " + (states.F==="H"?"Strategic":"Defensive");
+    document.getElementById("profileName").textContent = currentLang==='el' ? pNameEl : pNameEn;
+
+    // 3. KPI Grid
+    const kpiWrap = document.getElementById("kpiGrid");
+    kpiWrap.innerHTML = "";
+    DIM.forEach(d => {
+      const div = document.createElement("div");
+      div.className = "kpi-box";
+      const sVal = scores[d.key].toFixed(1);
+      const sState = states[d.key];
+      div.innerHTML = `
+        <div style="font-size:0.8rem; color:#aaa;">${d.key}</div>
+        <div class="kpi-val">${sVal}</div>
+        <span class="tag ${sState}">${sState==="H" ? "High" : "Low"}</span>
+      `;
+      kpiWrap.appendChild(div);
+    });
+
+    // 4. Micro Plan
+    generatePlan(states);
+
+    // Scroll
+    setTimeout(()=>{
+      document.getElementById("results").scrollIntoView({behavior:"smooth"});
+    }, 100);
+  }
+
+  function generatePlan(states){
+    const isEl = currentLang === 'el';
+    let txt = "";
+
+    // General Step
+    txt += isEl ? "1. Καταγραφή (3 μέρες): Κατάγραψε πότε νιώθεις αβεβαιότητα.\n" : "1. Log (3 days): Record when you feel uncertainty.\n";
+    
+    // Specifics based on low scores
+    if(states.F === "L"){
+      txt += isEl ? "2. Πλαισίωση: Άλλαξε τη λέξη 'απειλή' με τη λέξη 'πρόκληση' σε ένα email.\n" : "2. Framing: Replace 'threat' with 'challenge' in one email.\n";
+    }
+    if(states.E === "L"){
+      txt += isEl ? "3. Φίλτρο: Πριν απαντήσεις, πάρε 3 βαθιές ανάσες (κανόνας 5 δευτερολέπτων).\n" : "3. Filter: Take 3 breaths before replying (5-second rule).\n";
+    }
+    if(states.C === "L"){
+      txt += isEl ? "4. Επικοινωνία: Χρησιμοποίησε τη δομή 'Γεγονός -> Ερμηνεία -> Πρόταση'.\n" : "4. Comms: Use the structure 'Fact -> Interpretation -> Proposal'.\n";
+    }
+    
+    // Feedback Loop
+    txt += isEl ? "5. Feedback: Ζήτησε από έναν συνάδελφο να σου πει τι παρατήρησε." : "5. Feedback: Ask a colleague what they observed.";
+
+    document.getElementById("microPlanBody").textContent = txt;
+  }
+
+  /* --- EXPORT FUNCTIONS --- */
+  
+  // PDF Export
+  document.getElementById("pdfBtn").addEventListener("click", ()=>{
+    const el = document.getElementById("printArea");
+    const email = document.getElementById("userEmail").value || "user";
+    
+    document.getElementById("printDate").textContent = new Date().toLocaleString();
+    document.getElementById("printEmail").textContent = email;
+    document.querySelector(".print-only").style.display = "block";
+
+    const opt = {
+      margin:       10,
+      filename:     `ISRRA_Result_${email}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(el).save().then(()=>{
+       document.querySelector(".print-only").style.display = "none";
+    });
+  });
+
+  // Word Export
+  document.getElementById("wordBtn").addEventListener("click", ()=>{
+    const content = document.getElementById("printArea").innerHTML;
+    const email = document.getElementById("userEmail").value || "user";
+
+    const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML to Word</title></head><body>";
+    const footer = "</body></html>";
+    const sourceHTML = header + content + footer;
+
+    const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+    
+    const fileDownload = document.createElement("a");
+    document.body.appendChild(fileDownload);
+    fileDownload.href = source;
+    fileDownload.download = `ISRRA_Result_${email}.doc`;
+    fileDownload.click();
+    document.body.removeChild(fileDownload);
+  });
+
+  /* --- EVENT LISTENERS --- */
+  document.getElementById("toggleLang").addEventListener("click", toggleLanguage);
+  document.getElementById("calcBtn").addEventListener("click", calculate);
+  document.getElementById("resetBtn").addEventListener("click", ()=>{
+    if(confirm("Reset all answers?")){
+      localStorage.removeItem("isrra_ans");
+      location.reload();
+    }
+  });
+
+  // Run Init
+  window.addEventListener('DOMContentLoaded', init);
+
+</script>
+</body>
+</html>

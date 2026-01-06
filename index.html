@@ -3,27 +3,26 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ISRRA-Q | Risk Profile & Action Plan</title>
+  <title>ISRRA-Q | Professional Assessment</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Noto+Sans:wght@400;600;800&display=swap" rel="stylesheet">
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
     :root{
-      --bg: #0b1220;
-      --panel: #101a2e;
-      --card: #0f2233;
-      --muted: rgba(255,255,255,.70);
-      --text: rgba(255,255,255,.95);
-      --accent: #4fd1c5;
-      --accent2: #60a5fa;
-      --warn: #f59e0b;
-      --bad: #fb7185;
-      --ok: #34d399;
-      --radius: 16px;
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --card: #1e293b;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #38bdf8; /* Sky blue */
+      --accent2: #818cf8; /* Indigo */
+      --success: #34d399;
+      --danger: #fb7185;
+      --radius: 12px;
     }
 
     *{ box-sizing: border-box; }
@@ -32,290 +31,301 @@
       margin: 0;
       background: var(--bg);
       color: var(--text);
-      font-family: Inter, "Noto Sans", system-ui, sans-serif;
+      font-family: Inter, system-ui, sans-serif;
       line-height: 1.6;
       overflow-x: hidden;
     }
 
-    /* --- HERO --- */
+    /* --- HERO SCREEN --- */
     .hero-screen {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: radial-gradient(circle at 50% 30%, #1a2c4e 0%, #0b1220 70%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      text-align: center;
-      transition: opacity 0.5s ease;
+      position: fixed; inset: 0; z-index: 9999;
+      background: radial-gradient(circle at 50% 30%, #1e293b 0%, #0f172a 80%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 20px; text-align: center; transition: opacity 0.6s ease;
     }
-    .hero-screen.closed { opacity: 0; pointer-events: none; }
+    .hero-content { max-width: 680px; animation: fadeInUp 0.8s ease-out; }
     
-    .hero-content { max-width: 600px; animation: fadeIn 1s ease-out; }
     .hero-title {
-      font-size: 2.5rem; font-weight: 800;
-      background: linear-gradient(135deg, #4fd1c5, #60a5fa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin: 0 0 20px;
+      font-size: 2.8rem; font-weight: 800; margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-text {
+      font-size: 1.15rem; color: var(--muted); margin-bottom: 40px; font-weight: 300; line-height: 1.7;
     }
     .hero-btn {
-      background: var(--accent); color: #000; border: none;
-      padding: 16px 40px; font-size: 1.1rem; font-weight: 700;
-      border-radius: 50px; cursor: pointer;
-      box-shadow: 0 0 20px rgba(79,209,197,0.4);
-      transition: transform 0.2s;
+      background: var(--accent); color: #0f172a; border: none;
+      padding: 18px 45px; font-size: 1.1rem; font-weight: 700; border-radius: 50px;
+      cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.3);
     }
-    .hero-btn:hover { transform: scale(1.05); }
+    .hero-btn:hover { transform: translateY(-2px); box-shadow: 0 0 35px rgba(56, 189, 248, 0.5); }
     
-    .hero-lang-btn {
-      position: absolute; top: 20px; right: 20px;
-      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-      color: white; padding: 8px 16px; border-radius: 20px;
-      cursor: pointer;
+    .lang-toggle-hero {
+      position: absolute; top: 30px; right: 30px;
+      background: transparent; border: 1px solid rgba(255,255,255,0.2);
+      color: var(--text); padding: 8px 16px; border-radius: 20px; cursor: pointer;
     }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    @keyframes fadeInUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
 
     /* --- APP LAYOUT --- */
-    .wrap{
-      max-width: 800px; margin: 0 auto; padding: 20px 16px 100px;
-      display: none; opacity: 0; transition: opacity 1s ease;
+    .app-wrap {
+      max-width: 850px; margin: 0 auto; padding: 40px 20px 100px;
+      display: none; opacity: 0; transition: opacity 0.8s ease;
     }
-    .wrap.visible { display: block; opacity: 1; }
+    .app-wrap.active { display: block; opacity: 1; }
 
     header {
-      background: rgba(16,26,46,.95); border: 1px solid rgba(255,255,255,.1);
-      border-radius: var(--radius); padding: 20px; margin-bottom: 25px;
-      display: flex; flex-direction: column; gap: 15px;
+      background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius);
+      padding: 24px; margin-bottom: 40px;
+      position: sticky; top: 10px; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
-    
-    .top-bar { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; }
-    .brand h1 { font-size: 1.2rem; margin: 0; color: var(--accent); }
-    
-    .header-btns { display: flex; gap: 8px; }
-    .btn-small {
-      background: rgba(255,255,255,.1); border: none; color: white;
-      padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem;
-    }
-    
-    .progress-bar { height: 6px; background: rgba(255,255,255,.1); border-radius: 10px; overflow: hidden; }
-    .fill { height: 100%; width: 0%; background: var(--accent); transition: width 0.3s; }
-    .prog-text { font-size: 0.75rem; color: var(--muted); margin-top: 4px; display: block; text-align: right; }
+    .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+    .brand h1 { margin: 0; font-size: 1.4rem; font-weight: 700; color: var(--accent); }
+    .brand small { color: var(--muted); font-size: 0.85rem; }
+
+    .progress-track { height: 6px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0%; background: var(--accent); transition: width 0.3s ease; }
+    .progress-text { text-align: right; font-size: 0.8rem; color: var(--muted); margin-top: 5px; }
+
+    .btn-sm { background: rgba(255,255,255,0.1); border:none; color: white; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; margin-left: 8px;}
 
     /* --- QUESTIONS --- */
-    .dims-container { display: flex; flex-direction: column; gap: 30px; }
-    
     .dim-block {
-      background: var(--panel); border: 1px solid rgba(255,255,255,.08);
-      border-radius: var(--radius); padding: 20px;
+      background: var(--panel); border-radius: var(--radius); padding: 30px; margin-bottom: 30px;
+      border: 1px solid rgba(255,255,255,0.05);
     }
-    .dim-header {
-      border-bottom: 1px solid rgba(255,255,255,.1); padding-bottom: 10px; margin-bottom: 15px;
-    }
-    .dim-title { font-size: 1.1rem; font-weight: 700; color: var(--accent2); margin: 0; }
-    .dim-desc { font-size: 0.9rem; color: var(--muted); margin: 4px 0 0; }
+    .dim-header { border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 25px; }
+    .dim-title { margin: 0; color: var(--accent); font-size: 1.3rem; }
+    .dim-desc { margin: 5px 0 0; color: var(--muted); font-size: 0.95rem; }
 
-    .item-row { margin-bottom: 20px; }
-    .q-text { font-size: 0.95rem; margin-bottom: 8px; display: block; }
-    .required-mark { color: var(--bad); margin-left: 4px; }
+    .item-row { margin-bottom: 35px; }
+    .item-row:last-child { margin-bottom: 0; }
+    .q-text { font-size: 1.05rem; margin-bottom: 12px; display: block; font-weight: 500; }
+    .req-star { color: var(--accent2); font-size: 0.8rem; vertical-align: top; }
 
-    .likert-scale { display: flex; gap: 2px; justify-content: space-between; }
-    .likert-opt { 
-      flex: 1; text-align: center; cursor: pointer; 
-      background: rgba(255,255,255,.05); border-radius: 6px; padding: 10px 0;
-      transition: 0.2s; position: relative;
+    .scale-wrap { display: flex; gap: 4px; }
+    .scale-opt {
+      flex: 1; position: relative; cursor: pointer; text-align: center;
     }
-    .likert-opt:hover { background: rgba(255,255,255,.12); }
+    .scale-opt input { position: absolute; opacity: 0; cursor: pointer; }
+    .scale-box {
+      display: block; padding: 12px 0; background: rgba(0,0,0,0.2); border-radius: 8px;
+      color: var(--muted); font-weight: 600; transition: all 0.2s; border: 1px solid transparent;
+    }
+    .scale-opt:hover .scale-box { background: rgba(255,255,255,0.05); }
+    .scale-opt input:checked + .scale-box {
+      background: var(--accent); color: #0f172a; border-color: var(--accent); box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+    }
     
-    .likert-opt input { position: absolute; opacity: 0; cursor: pointer; }
-    .likert-val { font-weight: 600; font-size: 0.9rem; color: var(--muted); }
-    
-    /* Checked State */
-    .likert-opt:has(input:checked) {
-      background: var(--accent); color: #000; box-shadow: 0 0 10px rgba(79,209,197,0.4);
-    }
-    .likert-opt:has(input:checked) .likert-val { color: #000; }
+    .anchors { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--muted); margin-top: 8px; }
 
-    .anchors { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--muted); margin-top: 6px; padding: 0 4px; }
-
-    /* --- BOTTOM ACTION --- */
-    .bottom-action {
-      margin-top: 40px; padding: 30px; text-align: center;
-      background: var(--card); border-radius: var(--radius);
-      border: 1px solid rgba(255,255,255,.1);
-    }
+    /* --- SUBMIT --- */
+    .submit-area { text-align: center; margin-top: 50px; padding: 40px; background: var(--panel); border-radius: var(--radius); }
     .calc-btn {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #000; border: none; padding: 15px 50px;
-      font-size: 1.1rem; font-weight: 800; border-radius: 12px;
-      cursor: pointer; transition: transform 0.2s;
+      background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white;
+      border: none; padding: 16px 40px; font-size: 1.2rem; font-weight: 700; border-radius: 12px;
+      cursor: pointer; transition: transform 0.2s; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     }
-    .calc-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(79,209,197,0.4); }
+    .calc-btn:hover { transform: scale(1.02); }
+    .error-msg { color: var(--danger); margin-top: 15px; display: none; font-weight: 600; }
 
-    /* --- RESULTS & PRINT AREA --- */
-    .results-section { display: none; margin-top: 40px; }
-    .results-section.show { display: block; animation: slideUp 0.6s ease; }
-
-    .input-area { background: var(--panel); padding: 20px; border-radius: var(--radius); margin-bottom: 20px; border: 1px solid var(--accent); }
-    .email-input {
-      width: 100%; padding: 12px; border-radius: 8px; margin-top: 8px;
-      background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,.3); color: white;
-    }
-
-    /* Print Container styling for PDF */
-    #printContainer {
-      background: #fff; color: #000; /* Force white bg for PDF */
-      padding: 30px; border-radius: 4px;
-      display: none; /* Hidden until calc, but displayed during PDF gen */
-    }
-    /* When results are shown, we display the print container but styled for screen */
-    .results-section.show #printContainer {
-      display: block;
-      background: #f0f4f8; /* Light grey for screen */
-      color: #1a2c4e;
-    }
-
-    /* Internal Print Elements */
-    .print-header { border-bottom: 2px solid #1a2c4e; padding-bottom: 10px; margin-bottom: 20px; }
-    .print-logo { font-size: 1.5rem; font-weight: 800; color: #1a2c4e; }
+    /* --- RESULTS & REPORT (The visible part on screen) --- */
+    .results-wrap { display: none; margin-top: 40px; animation: slideUp 0.8s ease; }
+    .results-wrap.visible { display: block; }
     
-    .profile-summary {
-      background: #e6fffa; border: 1px solid #4fd1c5;
-      padding: 20px; border-radius: 12px; margin-bottom: 20px;
+    .email-box { margin-bottom: 20px; background: var(--panel); padding: 20px; border-radius: var(--radius); }
+    .email-input {
+      width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155;
+      color: white; border-radius: 8px; margin-top: 8px;
     }
-    .profile-code-display { font-size: 2rem; font-family: monospace; font-weight: 700; color: #0d9488; }
-    .profile-title-display { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
-    .profile-text { font-style: italic; color: #333; line-height: 1.5; font-size: 0.95rem; }
 
-    .kpi-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; }
-    .kpi-table th { text-align: left; border-bottom: 2px solid #ccc; padding: 8px; font-size: 0.8rem; text-transform: uppercase; }
-    .kpi-table td { border-bottom: 1px solid #eee; padding: 8px; }
-    .tag-h { background: #d1fae5; color: #065f46; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
-    .tag-l { background: #ffe4e6; color: #9f1239; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
-
-    .plan-box { background: #fff; border: 1px solid #ccc; padding: 15px; border-radius: 8px; }
-    .plan-lines { white-space: pre-line; line-height: 1.6; font-size: 0.95rem; }
-
-    .export-btns { display: flex; gap: 10px; margin-top: 20px; }
-    .exp-btn {
-      flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700;
-      background: #fff; color: #0b1220; transition: 0.2s;
+    /* --- PDF PRINT CONTAINER (Styled specifically for high contrast export) --- */
+    #reportContainer {
+      background: #ffffff; /* Must be white for PDF */
+      color: #111827;      /* Must be dark for PDF */
+      padding: 40px;
+      border-radius: 4px;
+      font-family: 'Noto Sans', sans-serif;
+      display: none; /* Hidden until calculation */
     }
-    .exp-btn.primary { background: var(--accent); color: #000; }
-    .exp-btn:hover { opacity: 0.9; }
+    
+    /* When results are visible, show this container on screen but styled */
+    .results-wrap.visible #reportContainer {
+      display: block;
+      margin-bottom: 30px;
+      box-shadow: 0 0 50px rgba(0,0,0,0.5);
+    }
 
-    @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    /* Internal styles for the report content */
+    .rpt-header { border-bottom: 2px solid #0f172a; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .rpt-logo { font-size: 1.8rem; font-weight: 800; color: #0f172a; letter-spacing: -1px; }
+    .rpt-meta { text-align: right; font-size: 0.85rem; color: #64748b; }
+    
+    .rpt-profile-box { background: #f8fafc; border: 1px solid #e2e8f0; border-left: 5px solid #38bdf8; padding: 25px; margin-bottom: 30px; border-radius: 8px; }
+    .rpt-code { font-family: monospace; font-size: 2.2rem; font-weight: 700; color: #0f172a; letter-spacing: 2px; }
+    .rpt-name { font-size: 1.3rem; font-weight: 600; color: #334155; margin-bottom: 15px; }
+    .rpt-desc { font-size: 0.95rem; line-height: 1.6; color: #334155; }
+    .rpt-desc strong { color: #0f172a; }
+
+    .rpt-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+    .rpt-table th { text-align: left; border-bottom: 2px solid #cbd5e1; padding: 10px; font-size: 0.85rem; text-transform: uppercase; color: #64748b; }
+    .rpt-table td { border-bottom: 1px solid #e2e8f0; padding: 12px 10px; font-size: 0.95rem; color: #0f172a; }
+    .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-block; }
+    .badge.H { background: #dcfce7; color: #15803d; }
+    .badge.L { background: #fee2e2; color: #b91c1c; }
+
+    .rpt-plan { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; }
+    .rpt-plan h3 { margin-top: 0; font-size: 1.1rem; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; }
+    .plan-step { margin-bottom: 15px; }
+    .plan-label { font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700; display: block; margin-bottom: 4px; }
+    .plan-content { font-size: 1rem; color: #0f172a; font-weight: 500; }
+
+    .actions { display: flex; gap: 15px; }
+    .export-btn { flex: 1; padding: 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 1rem; transition: 0.2s; }
+    .pdf-btn { background: var(--accent); color: #0f172a; }
+    .doc-btn { background: white; color: #0f172a; }
+    .export-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    @keyframes slideUp { from{transform:translateY(30px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+    @media print { body * { visibility: hidden; } #reportContainer, #reportContainer * { visibility: visible; } #reportContainer { position: absolute; left: 0; top: 0; width: 100%; } }
   </style>
 </head>
 
 <body>
 
-<div class="hero-screen" id="hero">
-  <button class="hero-lang-btn" id="heroLangBtn">English</button>
-  <div class="hero-content">
-    <h1 class="hero-title" id="h_title">Το Ρίσκο είναι Αφήγηση</h1>
-    <p style="color:rgba(255,255,255,0.8); margin-bottom:30px; font-size:1.1rem;" id="h_text">
-      Ανακαλύψτε το προφίλ σας στη λήψη αποφάσεων υπό πίεση. 
-      <br>Συμπληρώστε το ερωτηματολόγιο και λάβετε το προσωπικό σας πλάνο δράσης.
-    </p>
-    <button class="hero-btn" id="startBtn">START</button>
-  </div>
-</div>
-
-<div class="wrap" id="appWrap">
-  
-  <header>
-    <div class="top-bar">
-      <div class="brand">
-        <h1>ISRRA-Q</h1>
-        <small id="subTitle">Risk Perception & Action</small>
-      </div>
-      <div class="header-btns">
-        <button class="btn-small" id="toggleLang">EN/GR</button>
-        <button class="btn-small" id="resetBtn">Reset</button>
-      </div>
+  <div class="hero-screen" id="hero">
+    <button class="lang-toggle-hero" id="heroLang">English</button>
+    <div class="hero-content">
+      <h1 class="hero-title" id="hTitle">Το Ρίσκο είναι Αφήγηση</h1>
+      <p class="hero-text" id="hText">
+        Κάθε μέρα παίρνεις αποφάσεις υπό πίεση. Κάποιες φορές το ένστικτο σε σώζει, άλλες σε παγιδεύει. 
+        Το ISRRA δεν σε βαθμολογεί. Χαρτογραφεί τον "κώδικά" σου. 
+        <br><br>
+        Πώς αντιλαμβάνεσαι τον κίνδυνο όταν λείπουν τα δεδομένα; Πώς αντιδράς όταν η ομάδα σιωπά;
+        Ανακάλυψε το προφίλ σου και λάβετε ένα επαγγελματικό πλάνο δράσης.
+      </p>
+      <button class="hero-btn" id="startBtn">START ASSESSMENT</button>
     </div>
-    <div>
-      <div class="progress-bar"><div class="fill" id="bar"></div></div>
-      <span class="prog-text" id="progTxt">0/50 Answered</span>
-    </div>
-  </header>
-
-  <div class="dims-container" id="quizContainer">
-    </div>
-
-  <div class="bottom-action">
-    <button class="calc-btn" id="calcBtn">Υπολογισμός & Προβολή</button>
-    <p style="color:var(--bad); display:none; margin-top:10px;" id="errorMsg"></p>
   </div>
 
-  <div class="results-section" id="resultsSection">
+  <div class="app-wrap" id="app">
     
-    <div class="input-area no-print">
-      <h3 style="margin-top:0;">Ολοκλήρωση</h3>
-      <label for="userEmail" style="font-size:0.9rem; color:var(--muted);">Email (για το PDF):</label>
-      <input type="email" id="userEmail" class="email-input" placeholder="example@email.com">
+    <header>
+      <div class="header-flex">
+        <div class="brand">
+          <h1>ISRRA-Q</h1>
+          <small>Professional Risk Perception Inventory</small>
+        </div>
+        <div>
+          <button class="btn-sm" id="appLang">EN/GR</button>
+          <button class="btn-sm" id="resetBtn">Reset</button>
+        </div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="bar"></div>
+      </div>
+      <div class="progress-text" id="progTxt">0/50</div>
+    </header>
+
+    <div id="quizContainer">
+      </div>
+
+    <div class="submit-area">
+      <button class="calc-btn" id="calcBtn">Υπολογισμός & Προβολή Αναφοράς</button>
+      <div class="error-msg" id="errorMsg">Παρακαλώ απαντήστε σε όλες τις ερωτήσεις (50/50) για να προχωρήσετε.</div>
     </div>
 
-    <div id="printContainer">
+    <div class="results-wrap" id="results">
       
-      <div class="print-header">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span class="print-logo">ISRRA-Q Report</span>
-          <span style="font-size:0.8rem; color:#666;" id="printDate">Date</span>
-        </div>
-        <div style="font-size:0.9rem; color:#444;">User: <span id="printEmailDisplay"></span></div>
+      <div class="email-box">
+        <label style="font-size:0.9rem; color:var(--muted);">Email Χρήστη (για την κεφαλίδα του PDF):</label>
+        <input type="email" id="uEmail" class="email-input" placeholder="name@organization.com">
       </div>
 
-      <div class="profile-summary">
-        <div class="profile-code-display" id="resCode">-----</div>
-        <div class="profile-title-display" id="resName">Profile Name</div>
-        <hr style="border:0; border-top:1px solid #4fd1c5; margin:10px 0; opacity:0.3;">
-        <div class="profile-text" id="resExpl">
+      <div id="reportContainer">
+        <div class="rpt-header">
+          <div>
+            <div class="rpt-logo">ISRRA-Q REPORT</div>
+            <div style="font-size:0.9rem; margin-top:5px; color:#475569;">Professional Assessment</div>
           </div>
-      </div>
+          <div class="rpt-meta">
+            Date: <span id="rDate"></span><br>
+            User: <span id="rEmail"></span>
+          </div>
+        </div>
 
-      <div style="margin-bottom:20px;">
-        <h4 style="margin:0 0 10px 0; text-transform:uppercase; font-size:0.85rem; letter-spacing:1px;">Scores & Dimensions</h4>
-        <table class="kpi-table">
+        <div class="rpt-profile-box">
+          <div class="rpt-code" id="rCode">-----</div>
+          <div class="rpt-name" id="rName">Profile Name</div>
+          <div class="rpt-desc" id="rDesc">
+            </div>
+        </div>
+
+        <table class="rpt-table">
           <thead>
             <tr>
               <th>Dimension</th>
-              <th>Score</th>
-              <th>State</th>
+              <th>Score (1-7)</th>
+              <th>Status</th>
             </tr>
           </thead>
-          <tbody id="kpiBody"></tbody>
+          <tbody id="rTable"></tbody>
         </table>
+
+        <div class="rpt-plan">
+          <h3>Professional Micro-Plan (14 Days)</h3>
+          <p style="font-size:0.9rem; color:#64748b; margin-bottom:20px; font-style:italic;">
+            Σχεδιασμένο βάσει της αρχής ελαχίστης τριβής (Atomic Habits methodology).
+          </p>
+          <div id="rPlan"></div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="export-btn pdf-btn" id="pdfBtn">Download PDF</button>
+        <button class="export-btn doc-btn" id="docBtn">Download Word</button>
       </div>
 
-      <div class="plan-box">
-        <h4 style="margin-top:0; color:#0b1220;">SARIM Micro-Plan (14 Days)</h4>
-        <div class="plan-lines" id="planText"></div>
-      </div>
-
-    </div>
-
-    <div class="export-btns no-print">
-      <button class="exp-btn primary" id="pdfBtn">Download PDF</button>
-      <button class="exp-btn" id="wordBtn">Download Word</button>
     </div>
 
   </div>
 
-</div>
-
 <script>
-  /* --- CONTENT DATA --- */
-  const DIM = [
-    { key:"F", en:"Risk Framing", gr:"Πλαισίωση Ρίσκου", dEn:"How you perceive threat vs challenge.", dGr:"Πώς αντιλαμβάνεσαι την απειλή έναντι της πρόκλησης." },
-    { key:"E", en:"Cognitive Filtering", gr:"Συναισθηματικό Φίλτρο", dEn:"Impact of stress on judgement.", dGr:"Η επίδραση του στρες στην κρίση." },
-    { key:"C", en:"Communication", gr:"Επικοινωνία", dEn:"Clarity and signal transmission.", dGr:"Σαφήνεια και μετάδοση σήματος." },
-    { key:"A", en:"Action", gr:"Δράση", dEn:"Moving from thought to deed.", dGr:"Από τη σκέψη στην πράξη." },
-    { key:"S", en:"Safety Culture", gr:"Κουλτούρα Ασφάλειας", dEn:"Shared responsibility and speak-up.", dGr:"Συλλογική ευθύνη και αναφορά." },
-  ];
+  /* --- DATA --- */
+  const TEXT = {
+    el: {
+      hT: "Το Ρίσκο είναι Αφήγηση",
+      hTx: "Κάθε μέρα παίρνεις αποφάσεις υπό πίεση. Κάποιες φορές το ένστικτο σε σώζει, άλλες σε παγιδεύει. Το ISRRA δεν σε βαθμολογεί. Χαρτογραφεί τον 'κώδικά' σου. \n\nΠώς αντιλαμβάνεσαι τον κίνδυνο όταν λείπουν τα δεδομένα; Πώς αντιδράς όταν η ομάδα σιωπά; Ανακάλυψε το προφίλ σου και λάβετε ένα επαγγελματικό πλάνο δράσης.",
+      start: "ΕΝΑΡΞΗ", hLang: "English",
+      calc: "Υπολογισμός & Προβολή Αναφοράς",
+      err: "Παρακαλώ απαντήστε σε όλες τις ερωτήσεις (50/50).",
+      pL: "Διαφωνώ", pR: "Συμφωνώ",
+      dimF: "Πλαισίωση (Framing)", dimFd: "Πώς αντιλαμβάνεσαι την απειλή.",
+      dimE: "Συναίσθημα (Emotion)", dimEd: "Η επίδραση του στρες στην κρίση.",
+      dimC: "Επικοινωνία (Comm)", dimCd: "Σαφήνεια και ροή πληροφορίας.",
+      dimA: "Δράση (Action)", dimAd: "Εκτέλεση υπό καθεστώς αβεβαιότητας.",
+      dimS: "Κουλτούρα (Safety)", dimSd: "Συλλογική ευθύνη και εμπιστοσύνη.",
+      planIntro: "Σχεδιασμένο με μεθοδολογία αλλαγής συμπεριφοράς.",
+      s1: "TRIGGER (Το Σήμα)", s2: "MOTIVATION (Το Κίνητρο)", s3: "ACTION (Η Πράξη)", s4: "REWARD (Η Επιβεβαίωση)"
+    },
+    en: {
+      hT: "Risk is a Narrative",
+      hTx: "Every day you make decisions under pressure. Sometimes instinct saves you, sometimes it traps you. ISRRA does not grade you. It maps your 'code'. \n\nHow do you perceive danger when data is missing? How do you react when the team is silent? Discover your profile and get a professional action plan.",
+      start: "START ASSESSMENT", hLang: "Ελληνικά",
+      calc: "Calculate & View Report",
+      err: "Please answer all questions (50/50).",
+      pL: "Disagree", pR: "Agree",
+      dimF: "Framing", dimFd: "How you perceive threat vs challenge.",
+      dimE: "Emotion", dimEd: "Impact of stress on judgement.",
+      dimC: "Communication", dimCd: "Clarity and information flow.",
+      dimA: "Action", dimAd: "Execution under uncertainty.",
+      dimS: "Safety Culture", dimSd: "Shared responsibility and trust.",
+      planIntro: "Designed using behavioural change methodology.",
+      s1: "CUE (The Trigger)", s2: "CRAVING (The Motivation)", s3: "RESPONSE (The Action)", s4: "REWARD (The Feedback)"
+    }
+  };
 
   const ITEMS = {
     F: [
@@ -381,302 +391,297 @@
   };
 
   const REVERSE = { F:[3,5], E:[1,3,5,8], C:[3,5], A:[2,5,10], S:[2,5] };
-  
-  const TEXT = {
-    el: {
-      hTitle:"Το Ρίσκο είναι Αφήγηση", hText:"Ανακαλύψτε το προφίλ σας και λάβετε πλάνο δράσης.", start:"ΕΚΚΙΝΗΣΗ", hBtn:"English",
-      sub:"Risk Profile & Action", calc:"Υπολογισμός & Προβολή", reset:"Reset",
-      prog:"απαντήθηκαν", miss:"Πρέπει να απαντήσετε ΟΛΕΣ τις ερωτήσεις για να προχωρήσετε.",
-      ancL:"Διαφωνώ", ancR:"Συμφωνώ",
-      resH:"Υψηλό", resL:"Χαμηλό",
-      interpTitle: "Ερμηνεία Προφίλ",
-      hiddenRisk: "Κρυφό Κόστος:",
-      managerTip: "Συμβουλή Διαχείρισης:",
-      pdfBtn: "Λήψη PDF", wordBtn: "Λήψη Word",
-      emailPh: "Συμπληρώστε email για την αναφορά"
+
+  // --- RICH INTERPRETATION DATA (Developed) ---
+  const INTERP = {
+    F: {
+      H: { el:"Αντιμετωπίζετε το ρίσκο ως στρατηγικό γρίφο. Έχετε την ικανότητα να βλέπετε ευκαιρίες εκεί που άλλοι βλέπουν μόνο εμπόδια. Η 'πλαισίωσή' σας είναι προσανατολισμένη στη λύση, γεγονός που σας κάνει ανθεκτικούς στην αλλαγή.", 
+           en:"You perceive risk as a strategic puzzle. You have the ability to see opportunities where others see only obstacles. Your framing is solution-oriented, making you resilient to change." },
+      L: { el:"Τείνετε να ερμηνεύετε το άγνωστο ως προσωπική απειλή. Αυτό το αμυντικό πλαίσιο μπορεί να οδηγήσει σε αποφυγή απαραίτητων ρίσκων και σε υπερβολική προσκόλληση στο 'status quo' για ασφάλεια.", 
+           en:"You tend to interpret the unknown as a personal threat. This defensive framing can lead to avoiding necessary risks and sticking excessively to the 'status quo' for safety." }
     },
-    en: {
-      hTitle:"Risk is a Narrative", hText:"Discover your profile and get an action plan.", start:"START", hBtn:"Ελληνικά",
-      sub:"Risk Profile & Action", calc:"Calculate & View", reset:"Reset",
-      prog:"answered", miss:"You must answer ALL questions to proceed.",
-      ancL:"Disagree", ancR:"Agree",
-      resH:"High", resL:"Low",
-      interpTitle: "Profile Interpretation",
-      hiddenRisk: "Hidden Cost:",
-      managerTip: "Management Tip:",
-      pdfBtn: "Download PDF", wordBtn: "Download Word",
-      emailPh: "Enter email for the report"
+    E: {
+      H: { el:"Διαθέτετε υψηλή συναισθηματική σταθερότητα. Μπορείτε να διαχωρίσετε το 'σήμα' (δεδομένα) από τον 'θόρυβο' (φόβος) σε κρίσιμες στιγμές, διατηρώντας την κρίση σας καθαρή.", 
+           en:"You possess high emotional stability. You can separate the 'signal' (data) from the 'noise' (fear) during critical moments, keeping your judgement clear." },
+      L: { el:"Το στρες επηρεάζει άμεσα την κρίση σας. Σε συνθήκες πίεσης, το συναισθηματικό φίλτρο θολώνει, οδηγώντας είτε σε παρορμητικές αποφάσεις είτε σε 'πάγωμα'.", 
+           en:"Stress directly affects your judgement. Under pressure, your emotional filter blurs, leading to either impulsive decisions or freezing." }
+    },
+    C: {
+      H: { el:"Είστε σαφής πομπός μηνυμάτων. Δεν διστάζετε να επικοινωνήσετε δυσάρεστα νέα αν αυτό προστατεύει την ομάδα. Η διαφάνεια είναι το όπλο σας.", 
+           en:"You are a clear transmitter of messages. You do not hesitate to communicate unpleasant news if it protects the team. Transparency is your weapon." },
+      L: { el:"Υπάρχει δισταγμός στην έκφραση ανησυχιών. Πιθανώς αποφεύγετε τη σύγκρουση ή φοβάστε πως θα χαρακτηριστείτε ως 'αρνητικός', με αποτέλεσμα κρίσιμες πληροφορίες να χάνονται.", 
+           en:"There is hesitation in expressing concerns. You likely avoid conflict or fear being labeled 'negative', causing critical information to be lost." }
+    },
+    A: {
+      H: { el:"Μετατρέπετε τη σκέψη σε πράξη με ταχύτητα. Δεν περιμένετε το τέλειο σενάριο για να κινηθείτε. Αντιλαμβάνεστε ότι η αδράνεια είναι συχνά μεγαλύτερο ρίσκο από τη δράση.", 
+           en:"You convert thought into action swiftly. You do not wait for the perfect scenario to move. You realize that inaction is often a greater risk than action." },
+      L: { el:"Υποφέρετε από 'παράλυση ανάλυσης'. Η ανάγκη για βεβαιότητα σάς κρατά πίσω, με αποτέλεσμα να χάνεται πολύτιμος χρόνος αντίδρασης σε αναδυόμενες απειλές.", 
+           en:"You suffer from 'analysis paralysis'. The need for certainty holds you back, resulting in lost reaction time to emerging threats." }
+    },
+    S: {
+      H: { el:"Λειτουργείτε με γνώμονα το σύνολο. Αντιλαμβάνεστε την ασφάλεια ως συλλογικό αγαθό και ενθαρρύνετε ενεργά τους άλλους να μιλήσουν (psychological safety).", 
+           en:"You operate with the whole in mind. You perceive safety as a collective asset and actively encourage others to speak up (psychological safety)." },
+      L: { el:"Λειτουργείτε πιο ατομικά. Πιθανώς νιώθετε ότι η ασφάλεια είναι ευθύνη 'άλλων' ή των διαδικασιών, χάνοντας την αίσθηση της προσωπικής επιρροής στο σύστημα.", 
+           en:"You operate more individually. You likely feel safety is the responsibility of 'others' or procedures, losing the sense of personal influence on the system." }
     }
   };
 
-  /* --- RICH INTERPRETATION DATA --- */
-  const INTERP = {
-    F: { 
-      H: { el:"Βλέπεις το ρίσκο ως ευκαιρία μάθησης.", en:"You view risk as a learning opportunity." },
-      L: { el:"Βλέπεις το ρίσκο ως απειλή.", en:"You view risk as a threat." }
-    },
-    E: { 
-      H: { el:"Διατηρείς ψυχραιμία υπό πίεση.", en:"You stay calm under pressure." },
-      L: { el:"Το στρες επηρεάζει την κρίση σου.", en:"Stress affects your judgement." }
-    },
-    C: { 
-      H: { el:"Επικοινωνείς με σαφήνεια.", en:"You communicate clearly." },
-      L: { el:"Διστάζεις να μιλήσεις ανοιχτά.", en:"You hesitate to speak up." }
-    },
-    A: { 
-      H: { el:"Αναλαμβάνεις δράση άμεσα.", en:"You take action immediately." },
-      L: { el:"Παραλύεις μπροστά στην αβεβαιότητα.", en:"You freeze in uncertainty." }
-    },
-    S: { 
-      H: { el:"Λειτουργείς ομαδικά.", en:"You act as a team player." },
-      L: { el:"Λειτουργείς ατομικά.", en:"You act individually." }
-    }
-  };
+  /* --- ATOMIC PLAN LOGIC --- */
+  function getPlan(minDim, lang){
+    const isEl = lang==='el';
+    const plans = {
+      F: { // Framing Plan
+        trigger: isEl ? "Όταν ανοίγετε τα email το πρωί και νιώθετε πίεση..." : "When you open emails in the morning and feel pressure...",
+        motive: isEl ? "Σκεφτείτε: 'Αυτό είναι ένα παζλ που πρέπει να λύσω, όχι απειλή'." : "Think: 'This is a puzzle to solve, not a threat'.",
+        action: isEl ? "Γράψτε σε χαρτί ΜΙΑ ευκαιρία που κρύβεται σε αυτό το πρόβλημα (Κανόνας 2 λεπτών)." : "Write down ONE opportunity hidden in this problem (2-minute rule).",
+        reward: isEl ? "Βάλτε ένα 'tick' στο ημερολόγιο. Η αίσθηση ελέγχου είναι η ανταμοιβή." : "Tick the box on your calendar. The sense of control is the reward."
+      },
+      E: { // Emotion Plan
+        trigger: isEl ? "Όταν αισθανθείτε ταχυπαλμία ή ένταση σε meeting..." : "When you feel rapid heartbeat or tension in a meeting...",
+        motive: isEl ? "Υπενθύμιση: 'Η ηρεμία είναι η υπερδύναμή μου τώρα'." : "Reminder: 'Calmness is my superpower right now'.",
+        action: isEl ? "Πάρτε 3 βαθιές ανάσες πριν μιλήσετε. Μην απαντήσετε αμέσως." : "Take 3 deep breaths before speaking. Do not reply immediately.",
+        reward: isEl ? "Παρατηρήστε πόσο πιο καθαρή ήταν η απάντησή σας." : "Notice how much clearer your answer was."
+      },
+      C: { // Communication Plan
+        trigger: isEl ? "Όταν παρατηρείτε κάτι στραβό αλλά διστάζετε να το πείτε..." : "When you notice something wrong but hesitate to speak...",
+        motive: isEl ? "Σκεφτείτε: 'Η σιωπή μου μπορεί να κοστίσει στην ομάδα'." : "Think: 'My silence could cost the team'.",
+        action: isEl ? "Στείλτε το μήνυμα ξεκινώντας με τη φράση: 'Για την ασφάλειά μας, παρατήρησα...'" : "Send the message starting with: 'For our safety, I noticed...'",
+        reward: isEl ? "Δεχτείτε την ανακούφιση ότι κάνατε το καθήκον σας." : "Accept the relief that you did your duty."
+      },
+      A: { // Action Plan
+        trigger: isEl ? "Όταν αναβάλετε μια απόφαση περιμένοντας περισσότερα δεδομένα..." : "When you delay a decision waiting for more data...",
+        motive: isEl ? "Υπενθύμιση: 'Η ατελής δράση είναι καλύτερη από την τέλεια αδράνεια'." : "Reminder: 'Imperfect action is better than perfect inaction'.",
+        action: isEl ? "Κάντε το μικρότερο δυνατό πρώτο βήμα (π.χ. ένα τηλεφώνημα) ΤΩΡΑ." : "Take the smallest possible first step (e.g., a phone call) NOW.",
+        reward: isEl ? "Γιορτάστε το γεγονός ότι ξεκολλήσατε." : "Celebrate the fact that you got unstuck."
+      },
+      S: { // Safety Plan
+        trigger: isEl ? "Όταν βλέπετε έναν συνάδελφο να παίρνει ρίσκο..." : "When you see a colleague taking a risk...",
+        motive: isEl ? "Σκεφτείτε: 'Είμαστε όλοι στο ίδιο σύστημα'." : "Think: 'We are all in the same system'.",
+        action: isEl ? "Πλησιάστε και κάντε μια ερώτηση περιέργειας, όχι κριτικής." : "Approach and ask a question out of curiosity, not judgment.",
+        reward: isEl ? "Νιώστε τη σύνδεση της ομάδας." : "Feel the team connection."
+      }
+    };
+    const p = plans[minDim];
+    const labels = TEXT[lang];
+    return `
+      <div class="plan-step"><span class="plan-label">${labels.s1}</span><div class="plan-content">${p.trigger}</div></div>
+      <div class="plan-step"><span class="plan-label">${labels.s2}</span><div class="plan-content">${p.motive}</div></div>
+      <div class="plan-step"><span class="plan-label">${labels.s3}</span><div class="plan-content">${p.action}</div></div>
+      <div class="plan-step"><span class="plan-label">${labels.s4}</span><div class="plan-content">${p.reward}</div></div>
+    `;
+  }
 
   /* --- APP STATE --- */
   let curLang = "el";
-  const answers = JSON.parse(localStorage.getItem("isrra_ans_v3") || "{}");
+  const answers = JSON.parse(localStorage.getItem("isrra_pro_ans") || "{}");
 
   function init(){
-    renderHero();
     renderQuiz();
     updateProgress();
-    applyLang(curLang);
-  }
-
-  /* --- HERO & LANG --- */
-  function renderHero(){
-    const hero = document.getElementById("hero");
+    setLang(curLang);
+    
+    // Event Listeners
     document.getElementById("startBtn").onclick = () => {
-      hero.classList.add("closed");
+      document.getElementById("hero").style.opacity = "0";
       setTimeout(()=>{ 
-        hero.style.display="none"; 
-        document.getElementById("appWrap").classList.add("visible");
-      }, 500);
+        document.getElementById("hero").style.display="none"; 
+        document.getElementById("app").classList.add("active");
+      }, 600);
     };
-    document.getElementById("heroLangBtn").onclick = toggleLang;
-    document.getElementById("toggleLang").onclick = toggleLang;
+    
+    document.getElementById("heroLang").onclick = toggleLang;
+    document.getElementById("appLang").onclick = toggleLang;
+    document.getElementById("calcBtn").onclick = calculate;
+    document.getElementById("resetBtn").onclick = reset;
+    document.getElementById("pdfBtn").onclick = downloadPDF;
+    document.getElementById("docBtn").onclick = downloadWord;
   }
 
-  function toggleLang(){
-    curLang = curLang==="el"?"en":"el";
-    applyLang(curLang);
-  }
-
-  function applyLang(l){
+  function toggleLang(){ curLang = curLang==="el"?"en":"el"; setLang(curLang); }
+  
+  function setLang(l){
     const t = TEXT[l];
     document.documentElement.lang = l;
-    
-    document.getElementById("h_title").textContent = t.hTitle;
-    document.getElementById("h_text").textContent = t.hText;
+    // Hero
+    document.getElementById("hTitle").textContent = t.hT;
+    document.getElementById("hText").innerText = t.hTx;
     document.getElementById("startBtn").textContent = t.start;
-    document.getElementById("heroLangBtn").textContent = t.hBtn;
-    
-    document.getElementById("subTitle").textContent = t.sub;
+    document.getElementById("heroLang").textContent = t.hLang;
+    // App
     document.getElementById("calcBtn").textContent = t.calc;
-    document.getElementById("resetBtn").textContent = t.reset;
-    document.getElementById("pdfBtn").textContent = t.pdfBtn;
-    document.getElementById("wordBtn").textContent = t.wordBtn;
-    document.getElementById("userEmail").placeholder = t.emailPh;
-    
-    // Rerender questions to update text
-    renderQuiz();
+    document.getElementById("errorMsg").textContent = t.err;
+    renderQuiz(); // Re-render questions for language
   }
 
-  /* --- RENDER QUIZ (Vertical Blocks) --- */
   function renderQuiz(){
     const con = document.getElementById("quizContainer");
     con.innerHTML = "";
     
-    DIM.forEach(d => {
+    const dims = [
+      {k:"F", l:TEXT[curLang].dimF, d:TEXT[curLang].dimFd},
+      {k:"E", l:TEXT[curLang].dimE, d:TEXT[curLang].dimEd},
+      {k:"C", l:TEXT[curLang].dimC, d:TEXT[curLang].dimCd},
+      {k:"A", l:TEXT[curLang].dimA, d:TEXT[curLang].dimAd},
+      {k:"S", l:TEXT[curLang].dimS, d:TEXT[curLang].dimSd},
+    ];
+
+    dims.forEach(dim => {
       const block = document.createElement("div");
       block.className = "dim-block";
-      
-      const head = document.createElement("div");
-      head.className = "dim-header";
-      head.innerHTML = `
-        <h3 class="dim-title">${curLang==='el'?d.gr:d.en} (${d.key})</h3>
-        <p class="dim-desc">${curLang==='el'?d.dGr:d.dEn}</p>
+      block.innerHTML = `
+        <div class="dim-header">
+          <h2 class="dim-title">${dim.l}</h2>
+          <p class="dim-desc">${dim.d}</p>
+        </div>
       `;
-      block.appendChild(head);
-
-      const items = ITEMS[d.key];
-      items.forEach((it, idx) => {
-        const qid = `${d.key}_${idx+1}`;
+      
+      ITEMS[dim.k].forEach((it, i) => {
+        const qid = dim.k + "_" + (i+1);
+        const saved = answers[qid];
         const row = document.createElement("div");
         row.className = "item-row";
         
-        // Check if answered for mandatory mark (optional visual cue)
-        const isAns = answers[qid] !== undefined;
+        // Scale generation
+        let scales = `<div class="scale-wrap">`;
+        for(let v=1; v<=7; v++){
+          scales += `
+            <label class="scale-opt">
+              <input type="radio" name="${qid}" value="${v}" ${saved==v?'checked':''}>
+              <span class="scale-box">${v}</span>
+            </label>`;
+        }
+        scales += `</div>`;
+
+        row.innerHTML = `
+          <label class="q-text"><span class="req-star">*</span> ${i+1}. ${curLang==='el'?it.gr:it.en}</label>
+          ${scales}
+          <div class="anchors"><span>${TEXT[curLang].pL}</span><span>${TEXT[curLang].pR}</span></div>
+        `;
         
-        row.innerHTML = `<span class="q-text">
-          <strong>${idx+1}.</strong> ${curLang==='el'?it.gr:it.en}
-          <span class="required-mark">*</span>
-        </span>`;
-        
-        const likert = document.createElement("div");
-        likert.className = "likert-scale";
-        
-        [1,2,3,4,5,6,7].forEach(val => {
-          const opt = document.createElement("label");
-          opt.className = "likert-opt";
-          const chk = (answers[qid] === val) ? "checked" : "";
-          
-          opt.innerHTML = `
-            <input type="radio" name="${qid}" value="${val}" ${chk}>
-            <span class="likert-val">${val}</span>
-          `;
-          
-          opt.querySelector("input").addEventListener("change", (e)=>{
+        // Listener
+        row.querySelectorAll("input").forEach(inp => {
+          inp.addEventListener("change", (e)=>{
             answers[qid] = parseInt(e.target.value);
-            localStorage.setItem("isrra_ans_v3", JSON.stringify(answers));
+            localStorage.setItem("isrra_pro_ans", JSON.stringify(answers));
             updateProgress();
           });
-          likert.appendChild(opt);
         });
-
-        row.appendChild(likert);
         
-        const anchorDiv = document.createElement("div");
-        anchorDiv.className = "anchors";
-        anchorDiv.innerHTML = `<span>${TEXT[curLang].ancL}</span><span>${TEXT[curLang].ancR}</span>`;
-        row.appendChild(anchorDiv);
-
         block.appendChild(row);
       });
-      
       con.appendChild(block);
     });
   }
 
   function updateProgress(){
-    const done = Object.keys(answers).length;
-    const total = 50;
-    const pct = Math.round((done/total)*100);
+    const cnt = Object.keys(answers).length;
+    const pct = Math.round((cnt/50)*100);
     document.getElementById("bar").style.width = pct+"%";
-    document.getElementById("progTxt").textContent = `${done}/${total} ${TEXT[curLang].prog}`;
+    document.getElementById("progTxt").textContent = `${cnt}/50`;
   }
 
-  /* --- CALCULATION & INTERPRETATION --- */
-  document.getElementById("calcBtn").onclick = () => {
-    const done = Object.keys(answers).length;
-    const err = document.getElementById("errorMsg");
-    if(done < 50){
-      err.style.display = "block";
-      err.textContent = TEXT[curLang].miss;
+  function reset(){
+    if(confirm("Reset assessment?")){
+      localStorage.removeItem("isrra_pro_ans");
+      location.reload();
+    }
+  }
+
+  function calculate(){
+    const cnt = Object.keys(answers).length;
+    if(cnt < 50){
+      document.getElementById("errorMsg").style.display = "block";
       return;
     }
-    err.style.display = "none";
+    document.getElementById("errorMsg").style.display = "none";
     
-    // Calculate
+    // Scoring
     const scores = {};
     const states = {};
-    DIM.forEach(d => {
+    let lowestScore = 8;
+    let lowestDim = "F";
+
+    ["F","E","C","A","S"].forEach(k => {
       let sum = 0;
       for(let i=1; i<=10; i++){
-        let v = answers[`${d.key}_${i}`];
-        if(REVERSE[d.key].includes(i)) v = 8 - v;
+        let v = answers[k+"_"+i];
+        if(REVERSE[k].includes(i)) v = 8 - v;
         sum += v;
       }
-      scores[d.key] = sum/10;
-      states[d.key] = (sum/10) >= 4.0 ? "H" : "L";
+      const avg = sum/10;
+      scores[k] = avg;
+      states[k] = avg >= 4.0 ? "H" : "L";
+      
+      if(avg < lowestScore){
+        lowestScore = avg;
+        lowestDim = k;
+      }
     });
 
-    // Generate Outputs
-    const code = DIM.map(d => states[d.key]==="H"?d.key:d.key.toLowerCase()).join("");
-    document.getElementById("resCode").textContent = code;
+    // Populate Report
+    document.getElementById("rDate").textContent = new Date().toLocaleDateString();
+    document.getElementById("rEmail").textContent = document.getElementById("uEmail").value || "N/A";
     
-    // Name construction
-    const sS = states.S==="H" ? (curLang==='el'?"Ομαδικός":"Team") : (curLang==='el'?"Ατομικός":"Solo");
-    const sF = states.F==="H" ? (curLang==='el'?"Στρατηγικός":"Strategic") : (curLang==='el'?"Αμυντικός":"Defensive");
-    document.getElementById("resName").textContent = `${sS}, ${sF}`;
+    // Code
+    const code = ["F","E","C","A","S"].map(k => states[k]==="H"?k:k.toLowerCase()).join("");
+    document.getElementById("rCode").textContent = code;
+    
+    // Name
+    const n1 = states.S==="H" ? (curLang==='el'?"Ομαδικός":"Team Oriented") : (curLang==='el'?"Ατομικός":"Independent");
+    const n2 = states.F==="H" ? (curLang==='el'?"Στρατηγικός":"Strategic") : (curLang==='el'?"Αμυντικός":"Defensive");
+    document.getElementById("rName").textContent = `${n1} & ${n2}`;
 
-    // Rich Interpretation
-    let explHTML = "";
-    DIM.forEach(d => {
-      const st = states[d.key];
-      const txt = INTERP[d.key][st][curLang];
-      explHTML += `<strong>${d.key}:</strong> ${txt} `;
+    // Rich Desc
+    let descHTML = "";
+    ["F","E","C","A","S"].forEach(k => {
+       descHTML += `<p><strong>${TEXT[curLang]['dim'+k]}:</strong> ${INTERP[k][states[k]][curLang]}</p>`;
     });
-    // Add "Hidden Cost" logic based on lowest score
-    let minKey = "F"; let minVal = 10;
-    Object.entries(scores).forEach(([k,v])=>{ if(v<minVal){ minVal=v; minKey=k; } });
-    
-    const hiddenMap = {
-      F: {el:"Δυσκολία προσαρμογής σε αλλαγές.", en:"Difficulty adapting to change."},
-      E: {el:"Πιθανά λάθη λόγω άγχους.", en:"Potential errors due to anxiety."},
-      C: {el:"Παρεξηγήσεις στην ομάδα.", en:"Team misunderstandings."},
-      A: {el:"Καθυστερήσεις στην εκτέλεση.", en:"Execution delays."},
-      S: {el:"Έλλειψη αναφορών ασφαλείας.", en:"Lack of safety reporting."}
-    };
-    
-    explHTML += `<br><br><strong>${TEXT[curLang].hiddenRisk}</strong> ${hiddenMap[minKey][curLang]}`;
-    document.getElementById("resExpl").innerHTML = explHTML;
+    document.getElementById("rDesc").innerHTML = descHTML;
 
     // Table
-    const tbody = document.getElementById("kpiBody");
+    const tbody = document.getElementById("rTable");
     tbody.innerHTML = "";
-    DIM.forEach(d => {
-      const st = states[d.key];
-      const cls = st==="H"?"tag-h":"tag-l";
-      const lbl = st==="H"?TEXT[curLang].resH:TEXT[curLang].resL;
-      const row = `<tr>
-        <td>${curLang==='el'?d.gr:d.en}</td>
-        <td>${scores[d.key].toFixed(1)}</td>
-        <td><span class="${cls}">${lbl}</span></td>
-      </tr>`;
-      tbody.innerHTML += row;
+    ["F","E","C","A","S"].forEach(k => {
+      const st = states[k];
+      tbody.innerHTML += `
+        <tr>
+          <td>${TEXT[curLang]['dim'+k]}</td>
+          <td><b>${scores[k].toFixed(1)}</b></td>
+          <td><span class="badge ${st}">${st==='H'?'HIGH':'LOW'}</span></td>
+        </tr>`;
     });
 
-    // Plan
-    const plan = curLang==='el' 
-      ? "1. Καταγραφή: Για 3 μέρες σημείωσε τι σε δυσκόλεψε.\n2. Μικρή Αλλαγή: Διάλεξε τη διάσταση με το χαμηλότερο σκορ και κάνε μία ενέργεια.\n3. Feedback: Ρώτα έναν συνάδελφο πώς σε βλέπει."
-      : "1. Log: For 3 days note what challenged you.\n2. Small Shift: Pick your lowest score dimension and do one action.\n3. Feedback: Ask a peer for perspective.";
-    document.getElementById("planText").textContent = plan;
+    // Atomic Plan
+    document.getElementById("rPlan").innerHTML = getPlan(lowestDim, curLang);
 
-    // Show
-    document.getElementById("resultsSection").classList.add("show");
-    setTimeout(()=> document.getElementById("resultsSection").scrollIntoView({behavior:"smooth"}), 200);
-  };
+    // Show Results
+    document.getElementById("results").classList.add("visible");
+    setTimeout(() => {
+       document.getElementById("results").scrollIntoView({ behavior: 'smooth' });
+    }, 200);
+  }
 
-  document.getElementById("resetBtn").onclick = () => {
-    if(confirm("Reset all?")) { localStorage.removeItem("isrra_ans_v3"); location.reload(); }
-  };
-
-  /* --- EXPORT --- */
-  document.getElementById("pdfBtn").onclick = () => {
-    const el = document.getElementById("printContainer");
-    const email = document.getElementById("userEmail").value || "user";
-    
-    document.getElementById("printDate").textContent = new Date().toLocaleDateString();
-    document.getElementById("printEmailDisplay").textContent = email;
-
+  function downloadPDF(){
+    const el = document.getElementById("reportContainer");
     const opt = {
       margin: 10,
-      filename: `ISRRA_${email}.pdf`,
+      filename: 'ISRRA_Professional_Report.pdf',
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
+      html2canvas: { scale: 2, useCORS:true },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
-    // Element is visible now, so html2pdf should grab it
     html2pdf().set(opt).from(el).save();
-  };
+  }
 
-  document.getElementById("wordBtn").onclick = () => {
-    const content = document.getElementById("printContainer").innerHTML;
-    const email = document.getElementById("userEmail").value || "user";
+  function downloadWord(){
+    const content = document.getElementById("reportContainer").innerHTML;
     const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'><head><meta charset='utf-8'></head><body>";
-    const footer = "</body></html>";
-    const sourceHTML = header + content + footer;
-    
-    const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+    const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(header + content + "</body></html>");
     const link = document.createElement("a");
-    document.body.appendChild(link);
     link.href = source;
-    link.download = `ISRRA_${email}.doc`;
+    link.download = 'ISRRA_Report.doc';
     link.click();
-    document.body.removeChild(link);
-  };
+  }
 
   init();
 </script>

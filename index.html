@@ -4,8 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>ISRRA-Q | Risk Profile & Action Plan</title>
-  <meta name="description" content="ISRRA-Q questionnaire. Bilingual. PDF & Word Export." />
-
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
@@ -17,17 +16,14 @@
       --bg: #0b1220;
       --panel: #101a2e;
       --card: #0f2233;
-      --muted: rgba(255,255,255,.72);
-      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --text: rgba(255,255,255,.95);
       --accent: #4fd1c5;
       --accent2: #60a5fa;
       --warn: #f59e0b;
       --bad: #fb7185;
       --ok: #34d399;
-      --shadow: 0 12px 35px rgba(0,0,0,.35);
       --radius: 16px;
-      --radius2: 22px;
-      --ring: 0 0 0 3px rgba(79,209,197,.25);
     }
 
     *{ box-sizing: border-box; }
@@ -37,11 +33,11 @@
       background: var(--bg);
       color: var(--text);
       font-family: Inter, "Noto Sans", system-ui, sans-serif;
-      line-height: 1.5;
+      line-height: 1.6;
       overflow-x: hidden;
     }
 
-    /* --- HERO SECTION --- */
+    /* --- HERO --- */
     .hero-screen {
       position: fixed;
       inset: 0;
@@ -55,299 +51,270 @@
       text-align: center;
       transition: opacity 0.5s ease;
     }
+    .hero-screen.closed { opacity: 0; pointer-events: none; }
     
-    /* Class to hide hero */
-    .hero-screen.closed {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .hero-content {
-      max-width: 600px;
-      animation: fadeIn 1s ease-out;
-    }
+    .hero-content { max-width: 600px; animation: fadeIn 1s ease-out; }
     .hero-title {
-      font-size: 3rem;
-      font-weight: 800;
+      font-size: 2.5rem; font-weight: 800;
       background: linear-gradient(135deg, #4fd1c5, #60a5fa);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin: 0 0 20px;
-      line-height: 1.1;
-    }
-    .hero-text {
-      font-size: 1.2rem;
-      color: var(--muted);
-      margin-bottom: 40px;
-      font-weight: 300;
     }
     .hero-btn {
-      background: var(--accent);
-      color: #000;
-      border: none;
-      padding: 16px 40px;
-      font-size: 1.1rem;
-      font-weight: 700;
-      border-radius: 50px;
-      cursor: pointer;
+      background: var(--accent); color: #000; border: none;
+      padding: 16px 40px; font-size: 1.1rem; font-weight: 700;
+      border-radius: 50px; cursor: pointer;
       box-shadow: 0 0 20px rgba(79,209,197,0.4);
       transition: transform 0.2s;
     }
     .hero-btn:hover { transform: scale(1.05); }
-
-    /* Language Button on Hero */
-    .hero-lang-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: background 0.2s;
-    }
-    .hero-lang-btn:hover { background: rgba(255,255,255,0.2); }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* --- MAIN APP --- */
-    .wrap{
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 24px 16px 80px;
-      opacity: 0; 
-      transition: opacity 1s ease;
-      display: none; /* Hidden initially */
-    }
-    .wrap.visible { 
-      opacity: 1; 
-      display: block; 
-    }
-
-    header{
-      background: rgba(16,26,46,.9);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: var(--radius2);
-      padding: 20px;
-      margin-bottom: 20px;
-      backdrop-filter: blur(10px);
-      box-shadow: var(--shadow);
-    }
-
-    .brand h1 { font-size: 1.2rem; margin: 0; }
-    .brand p { font-size: 0.85rem; color: var(--muted); margin: 4px 0 0; }
-
-    .controls{ margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
-    .btn{
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.12);
-      color: var(--text);
-      padding: 8px 16px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    .btn.primary{
-      background: linear-gradient(135deg, rgba(79,209,197,.3), rgba(96,165,250,.3));
-      border-color: rgba(79,209,197,.3);
-    }
-    .btn:hover{ background: rgba(255,255,255,.1); }
-
-    .card {
-      background: var(--panel);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: var(--radius2);
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: var(--shadow);
-    }
-    .card h2 { margin-top: 0; font-size: 1.1rem; }
-    .hint { color: var(--muted); font-size: 0.9rem; }
-
-    /* Dimensions Grid */
-    .dims { display: grid; gap: 16px; }
-    @media(min-width: 768px) { .dims { grid-template-columns: 1fr 1fr; } }
     
-    .dim {
-      background: rgba(255,255,255,.03);
-      border: 1px solid rgba(255,255,255,.06);
-      border-radius: 16px;
-      padding: 16px;
+    .hero-lang-btn {
+      position: absolute; top: 20px; right: 20px;
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+      color: white; padding: 8px 16px; border-radius: 20px;
+      cursor: pointer;
     }
-    .dim-head { display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 700; }
-    .dim-code { font-size: 0.75rem; background: rgba(255,255,255,.1); padding: 2px 8px; border-radius: 10px; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-    .item { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.05); }
-    .item-q { font-size: 0.9rem; margin-bottom: 6px; }
-
-    /* Likert */
-    .likert { display: flex; justify-content: space-between; gap: 4px; }
-    .opt { 
-      flex: 1; 
-      text-align: center; 
-      background: rgba(255,255,255,.05); 
-      border-radius: 8px; 
-      cursor: pointer; 
-      padding: 6px 0; 
-      font-size: 0.8rem;
-      transition: 0.2s;
+    /* --- APP LAYOUT --- */
+    .wrap{
+      max-width: 800px; margin: 0 auto; padding: 20px 16px 100px;
+      display: none; opacity: 0; transition: opacity 1s ease;
     }
-    .opt:hover { background: rgba(255,255,255,.1); }
-    input[type="radio"] { display: none; }
-    input[type="radio"]:checked + div { font-weight: bold; color: var(--accent); }
-    .opt:has(input:checked) { background: rgba(79,209,197,.15); border: 1px solid rgba(79,209,197,.3); }
+    .wrap.visible { display: block; opacity: 1; }
 
-    .anchors { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
-
-    /* Progress Bar */
-    .progress-wrap { margin-top: 10px; display: flex; align-items: center; gap: 10px; }
-    .progress { flex: 1; height: 6px; background: rgba(255,255,255,.1); border-radius: 10px; overflow: hidden; }
-    .bar { height: 100%; width: 0%; background: var(--accent); transition: width 0.3s; }
-    .progress-txt { font-size: 0.75rem; color: var(--muted); }
-
-    /* Results Section */
-    .results { display: none; animation: slideUp 0.5s ease; }
-    .results.show { display: block; }
-    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-    .kpi-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); margin-bottom: 20px; }
-    .kpi-box { 
-      background: rgba(0,0,0,.2); 
-      padding: 12px; 
-      border-radius: 12px; 
-      border: 1px solid rgba(255,255,255,.05); 
-      text-align: center;
+    header {
+      background: rgba(16,26,46,.95); border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--radius); padding: 20px; margin-bottom: 25px;
+      display: flex; flex-direction: column; gap: 15px;
     }
-    .kpi-val { font-size: 1.5rem; font-weight: 800; margin: 4px 0; }
-    .tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; display: inline-block; }
-    .tag.H { background: rgba(52,211,153,.2); color: #34d399; }
-    .tag.L { background: rgba(251,113,133,.2); color: #fb7185; }
-    .tag.M { background: rgba(245,158,11,.2); color: #fbbf24; }
-
-    .profile-block { 
-      background: linear-gradient(180deg, rgba(79,209,197,.05), transparent); 
-      border: 1px solid var(--accent); 
-      padding: 20px; 
-      border-radius: 16px; 
-      text-align: center;
-      margin-bottom: 20px;
+    
+    .top-bar { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; }
+    .brand h1 { font-size: 1.2rem; margin: 0; color: var(--accent); }
+    
+    .header-btns { display: flex; gap: 8px; }
+    .btn-small {
+      background: rgba(255,255,255,.1); border: none; color: white;
+      padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem;
     }
-    .big-code { font-size: 2.5rem; font-family: monospace; letter-spacing: 4px; font-weight: 700; color: var(--accent); margin: 10px 0; }
+    
+    .progress-bar { height: 6px; background: rgba(255,255,255,.1); border-radius: 10px; overflow: hidden; }
+    .fill { height: 100%; width: 0%; background: var(--accent); transition: width 0.3s; }
+    .prog-text { font-size: 0.75rem; color: var(--muted); margin-top: 4px; display: block; text-align: right; }
 
-    .input-group { margin-bottom: 15px; }
-    .input-field { 
-      width: 100%; 
-      padding: 10px; 
-      border-radius: 8px; 
-      border: 1px solid rgba(255,255,255,.2); 
-      background: rgba(0,0,0,.3); 
-      color: white; 
+    /* --- QUESTIONS --- */
+    .dims-container { display: flex; flex-direction: column; gap: 30px; }
+    
+    .dim-block {
+      background: var(--panel); border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius); padding: 20px;
+    }
+    .dim-header {
+      border-bottom: 1px solid rgba(255,255,255,.1); padding-bottom: 10px; margin-bottom: 15px;
+    }
+    .dim-title { font-size: 1.1rem; font-weight: 700; color: var(--accent2); margin: 0; }
+    .dim-desc { font-size: 0.9rem; color: var(--muted); margin: 4px 0 0; }
+
+    .item-row { margin-bottom: 20px; }
+    .q-text { font-size: 0.95rem; margin-bottom: 8px; display: block; }
+    .required-mark { color: var(--bad); margin-left: 4px; }
+
+    .likert-scale { display: flex; gap: 2px; justify-content: space-between; }
+    .likert-opt { 
+      flex: 1; text-align: center; cursor: pointer; 
+      background: rgba(255,255,255,.05); border-radius: 6px; padding: 10px 0;
+      transition: 0.2s; position: relative;
+    }
+    .likert-opt:hover { background: rgba(255,255,255,.12); }
+    
+    .likert-opt input { position: absolute; opacity: 0; cursor: pointer; }
+    .likert-val { font-weight: 600; font-size: 0.9rem; color: var(--muted); }
+    
+    /* Checked State */
+    .likert-opt:has(input:checked) {
+      background: var(--accent); color: #000; box-shadow: 0 0 10px rgba(79,209,197,0.4);
+    }
+    .likert-opt:has(input:checked) .likert-val { color: #000; }
+
+    .anchors { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--muted); margin-top: 6px; padding: 0 4px; }
+
+    /* --- BOTTOM ACTION --- */
+    .bottom-action {
+      margin-top: 40px; padding: 30px; text-align: center;
+      background: var(--card); border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.1);
+    }
+    .calc-btn {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #000; border: none; padding: 15px 50px;
+      font-size: 1.1rem; font-weight: 800; border-radius: 12px;
+      cursor: pointer; transition: transform 0.2s;
+    }
+    .calc-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(79,209,197,0.4); }
+
+    /* --- RESULTS & PRINT AREA --- */
+    .results-section { display: none; margin-top: 40px; }
+    .results-section.show { display: block; animation: slideUp 0.6s ease; }
+
+    .input-area { background: var(--panel); padding: 20px; border-radius: var(--radius); margin-bottom: 20px; border: 1px solid var(--accent); }
+    .email-input {
+      width: 100%; padding: 12px; border-radius: 8px; margin-top: 8px;
+      background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,.3); color: white;
     }
 
-    /* Print/PDF Specifics */
-    .print-only { display: none; }
+    /* Print Container styling for PDF */
+    #printContainer {
+      background: #fff; color: #000; /* Force white bg for PDF */
+      padding: 30px; border-radius: 4px;
+      display: none; /* Hidden until calc, but displayed during PDF gen */
+    }
+    /* When results are shown, we display the print container but styled for screen */
+    .results-section.show #printContainer {
+      display: block;
+      background: #f0f4f8; /* Light grey for screen */
+      color: #1a2c4e;
+    }
+
+    /* Internal Print Elements */
+    .print-header { border-bottom: 2px solid #1a2c4e; padding-bottom: 10px; margin-bottom: 20px; }
+    .print-logo { font-size: 1.5rem; font-weight: 800; color: #1a2c4e; }
+    
+    .profile-summary {
+      background: #e6fffa; border: 1px solid #4fd1c5;
+      padding: 20px; border-radius: 12px; margin-bottom: 20px;
+    }
+    .profile-code-display { font-size: 2rem; font-family: monospace; font-weight: 700; color: #0d9488; }
+    .profile-title-display { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
+    .profile-text { font-style: italic; color: #333; line-height: 1.5; font-size: 0.95rem; }
+
+    .kpi-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; }
+    .kpi-table th { text-align: left; border-bottom: 2px solid #ccc; padding: 8px; font-size: 0.8rem; text-transform: uppercase; }
+    .kpi-table td { border-bottom: 1px solid #eee; padding: 8px; }
+    .tag-h { background: #d1fae5; color: #065f46; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
+    .tag-l { background: #ffe4e6; color: #9f1239; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
+
+    .plan-box { background: #fff; border: 1px solid #ccc; padding: 15px; border-radius: 8px; }
+    .plan-lines { white-space: pre-line; line-height: 1.6; font-size: 0.95rem; }
+
+    .export-btns { display: flex; gap: 10px; margin-top: 20px; }
+    .exp-btn {
+      flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700;
+      background: #fff; color: #0b1220; transition: 0.2s;
+    }
+    .exp-btn.primary { background: var(--accent); color: #000; }
+    .exp-btn:hover { opacity: 0.9; }
+
+    @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   </style>
 </head>
 
 <body>
 
-  <div class="hero-screen" id="hero">
-    <button class="hero-lang-btn" id="heroLangBtn">English</button>
-
-    <div class="hero-content">
-      <h1 class="hero-title" id="h_title">Το Ρίσκο είναι Αφήγηση</h1>
-      <p class="hero-text" id="h_text">
-        Κάθε μέρα παίρνεις αποφάσεις υπό πίεση. Κάποιες φορές το ένστικτο σε σώζει, άλλες σε παγιδεύει. 
-        Το εργαλείο ISRRA δεν σε βαθμολογεί. Σου δείχνει τον "κώδικά" σου. 
-        Πώς αντιλαμβάνεσαι τον κίνδυνο; Πώς αντιδράς όταν όλα είναι αβέβαια;
-      </p>
-      <button class="hero-btn" id="startBtn">START</button>
-    </div>
+<div class="hero-screen" id="hero">
+  <button class="hero-lang-btn" id="heroLangBtn">English</button>
+  <div class="hero-content">
+    <h1 class="hero-title" id="h_title">Το Ρίσκο είναι Αφήγηση</h1>
+    <p style="color:rgba(255,255,255,0.8); margin-bottom:30px; font-size:1.1rem;" id="h_text">
+      Ανακαλύψτε το προφίλ σας στη λήψη αποφάσεων υπό πίεση. 
+      <br>Συμπληρώστε το ερωτηματολόγιο και λάβετε το προσωπικό σας πλάνο δράσης.
+    </p>
+    <button class="hero-btn" id="startBtn">START</button>
   </div>
+</div>
 
-  <div class="wrap" id="appWrap">
-    <header>
+<div class="wrap" id="appWrap">
+  
+  <header>
+    <div class="top-bar">
       <div class="brand">
-        <h1>ISRRA-Q | Profile & Action</h1>
-        <p id="subTitle">Ερωτηματολόγιο Αντίληψης Ρίσκου (Bilingual)</p>
+        <h1>ISRRA-Q</h1>
+        <small id="subTitle">Risk Perception & Action</small>
       </div>
-      <div class="progress-wrap">
-        <div class="progress"><div class="bar" id="bar"></div></div>
-        <span class="progress-txt" id="progTxt">0/50</span>
+      <div class="header-btns">
+        <button class="btn-small" id="toggleLang">EN/GR</button>
+        <button class="btn-small" id="resetBtn">Reset</button>
       </div>
-      <div class="controls">
-        <button class="btn" id="toggleLang">Switch Language</button>
-        <button class="btn" id="resetBtn">Reset</button>
-        <button class="btn primary" id="calcBtn">Υπολογισμός</button>
-      </div>
-    </header>
+    </div>
+    <div>
+      <div class="progress-bar"><div class="fill" id="bar"></div></div>
+      <span class="prog-text" id="progTxt">0/50 Answered</span>
+    </div>
+  </header>
 
-    <div id="quizArea" class="card">
-      <h2 id="dimsTitle">Ερωτήσεις (Διαστάσεις)</h2>
-      <p class="hint" id="dimsHint">Απαντήστε σε όλες με ειλικρίνεια. 1=Διαφωνώ, 7=Συμφωνώ.</p>
-      <div class="dims" id="dimsContainer"></div>
+  <div class="dims-container" id="quizContainer">
     </div>
 
-    <div id="results" class="results">
-      
-      <div class="card no-print">
-        <h2 id="finalStepTitle">Ολοκλήρωση</h2>
-        <div class="input-group">
-          <label class="hint" for="userEmail">Email (για το αρχείο PDF):</label>
-          <input type="email" id="userEmail" class="input-field" placeholder="name@company.com">
-        </div>
-        <p class="hint" id="emailHint">Συμπληρώστε το email σας. Θα εμφανιστεί στο PDF και θα ορίσει το όνομα του αρχείου.</p>
-      </div>
-
-      <div id="printArea">
-        <div class="card profile-block">
-          <h2 id="resTitle">Το Προφίλ σας</h2>
-          <div class="big-code" id="profileCode">-----</div>
-          <h3 id="profileName">...</h3>
-          <p id="profileExpl" style="font-style: italic; color: rgba(255,255,255,0.8);"></p>
-        </div>
-
-        <div class="card">
-          <h2 id="scoresTitle">Αναλυτική Βαθμολογία</h2>
-          <div class="kpi-grid" id="kpiGrid"></div>
-        </div>
-
-        <div class="card">
-          <h2 id="planTitle">SARIM Micro-Plan</h2>
-          <p class="hint" id="planIntro">Βάσει του προφίλ σας, προτείνεται το εξής πλάνο 14 ημερών:</p>
-          <div style="background: rgba(255,255,255,.05); padding: 15px; border-radius: 10px; margin-top:10px;">
-            <p id="microPlanBody" style="white-space: pre-line; line-height: 1.6;"></p>
-          </div>
-        </div>
-
-        <div class="print-only">
-          <p style="font-size: 10px; color: grey; margin-top: 20px;">Generated by ISRRA-Q. Date: <span id="printDate"></span></p>
-          <p style="font-size: 10px; color: grey;">User Email: <span id="printEmail"></span></p>
-        </div>
-      </div>
-
-      <div class="card controls no-print">
-        <button class="btn primary" id="pdfBtn">Download PDF Results</button>
-        <button class="btn" id="wordBtn">Export to Word (.doc)</button>
-      </div>
-
-    </div>
+  <div class="bottom-action">
+    <button class="calc-btn" id="calcBtn">Υπολογισμός & Προβολή</button>
+    <p style="color:var(--bad); display:none; margin-top:10px;" id="errorMsg"></p>
   </div>
+
+  <div class="results-section" id="resultsSection">
+    
+    <div class="input-area no-print">
+      <h3 style="margin-top:0;">Ολοκλήρωση</h3>
+      <label for="userEmail" style="font-size:0.9rem; color:var(--muted);">Email (για το PDF):</label>
+      <input type="email" id="userEmail" class="email-input" placeholder="example@email.com">
+    </div>
+
+    <div id="printContainer">
+      
+      <div class="print-header">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span class="print-logo">ISRRA-Q Report</span>
+          <span style="font-size:0.8rem; color:#666;" id="printDate">Date</span>
+        </div>
+        <div style="font-size:0.9rem; color:#444;">User: <span id="printEmailDisplay"></span></div>
+      </div>
+
+      <div class="profile-summary">
+        <div class="profile-code-display" id="resCode">-----</div>
+        <div class="profile-title-display" id="resName">Profile Name</div>
+        <hr style="border:0; border-top:1px solid #4fd1c5; margin:10px 0; opacity:0.3;">
+        <div class="profile-text" id="resExpl">
+          </div>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <h4 style="margin:0 0 10px 0; text-transform:uppercase; font-size:0.85rem; letter-spacing:1px;">Scores & Dimensions</h4>
+        <table class="kpi-table">
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>Score</th>
+              <th>State</th>
+            </tr>
+          </thead>
+          <tbody id="kpiBody"></tbody>
+        </table>
+      </div>
+
+      <div class="plan-box">
+        <h4 style="margin-top:0; color:#0b1220;">SARIM Micro-Plan (14 Days)</h4>
+        <div class="plan-lines" id="planText"></div>
+      </div>
+
+    </div>
+
+    <div class="export-btns no-print">
+      <button class="exp-btn primary" id="pdfBtn">Download PDF</button>
+      <button class="exp-btn" id="wordBtn">Download Word</button>
+    </div>
+
+  </div>
+
+</div>
 
 <script>
-  /* --- DATA & CONFIG --- */
+  /* --- CONTENT DATA --- */
   const DIM = [
-    { key:"F", en:"Risk Framing", gr:"Πλαισίωση Ρίσκου", descEl:"Πώς αντιλαμβάνεσαι την απειλή.", descEn:"How you perceive threat." },
-    { key:"E", en:"Cognitive Filtering", gr:"Συναισθηματικό Φίλτρο", descEl:"Η επίδραση του στρες στην κρίση.", descEn:"Impact of stress on judgement." },
-    { key:"C", en:"Communication", gr:"Επικοινωνία", descEl:"Πώς μεταδίδεις το μήνυμα.", descEn:"How you convey the message." },
-    { key:"A", en:"Action", gr:"Δράση", descEl:"Από τη σκέψη στην πράξη.", descEn:"From thought to deed." },
-    { key:"S", en:"Safety Culture", gr:"Κουλτούρα Ασφάλειας", descEl:"Συλλογική ευθύνη.", descEn:"Shared responsibility." },
+    { key:"F", en:"Risk Framing", gr:"Πλαισίωση Ρίσκου", dEn:"How you perceive threat vs challenge.", dGr:"Πώς αντιλαμβάνεσαι την απειλή έναντι της πρόκλησης." },
+    { key:"E", en:"Cognitive Filtering", gr:"Συναισθηματικό Φίλτρο", dEn:"Impact of stress on judgement.", dGr:"Η επίδραση του στρες στην κρίση." },
+    { key:"C", en:"Communication", gr:"Επικοινωνία", dEn:"Clarity and signal transmission.", dGr:"Σαφήνεια και μετάδοση σήματος." },
+    { key:"A", en:"Action", gr:"Δράση", dEn:"Moving from thought to deed.", dGr:"Από τη σκέψη στην πράξη." },
+    { key:"S", en:"Safety Culture", gr:"Κουλτούρα Ασφάλειας", dEn:"Shared responsibility and speak-up.", dGr:"Συλλογική ευθύνη και αναφορά." },
   ];
 
   const ITEMS = {
@@ -414,346 +381,304 @@
   };
 
   const REVERSE = { F:[3,5], E:[1,3,5,8], C:[3,5], A:[2,5,10], S:[2,5] };
-
-  const LANG = {
+  
+  const TEXT = {
     el: {
-      h_title: "Το Ρίσκο είναι Αφήγηση",
-      h_text: "Κάθε μέρα παίρνεις αποφάσεις υπό πίεση. Κάποιες φορές το ένστικτο σε σώζει, άλλες σε παγιδεύει. Το εργαλείο ISRRA δεν σε βαθμολογεί. Σου δείχνει τον 'κώδικά' σου. Πώς αντιλαμβάνεσαι τον κίνδυνο; Πώς αντιδράς όταν όλα είναι αβέβαια;",
-      start: "ΕΚΚΙΝΗΣΗ",
-      heroBtn: "English", // Button text on Hero to switch TO English
-      toggleBtn: "English", // Button text in App
-      sub: "Ερωτηματολόγιο Αντίληψης Ρίσκου",
-      calc: "Υπολογισμός",
-      reset: "Reset",
-      dimsTitle: "Διαστάσεις",
-      dimsHint: "Απαντήστε σε όλες τις ερωτήσεις. 1=Διαφωνώ, 7=Συμφωνώ.",
-      resTitle: "Το Προφίλ σας",
-      planTitle: "SARIM Micro-Plan",
-      planIntro: "Προτείνεται το εξής πλάνο 14 ημερών:",
-      missing: "Παρακαλώ απαντήστε σε όλες τις ερωτήσεις.",
-      pdfBtn: "Λήψη PDF (Results)",
-      wordBtn: "Λήψη Word (.doc)",
-      emailHint: "Συμπληρώστε το email σας. Θα εμφανιστεί στο PDF.",
-      anchorL: "Διαφωνώ", anchorR: "Συμφωνώ"
+      hTitle:"Το Ρίσκο είναι Αφήγηση", hText:"Ανακαλύψτε το προφίλ σας και λάβετε πλάνο δράσης.", start:"ΕΚΚΙΝΗΣΗ", hBtn:"English",
+      sub:"Risk Profile & Action", calc:"Υπολογισμός & Προβολή", reset:"Reset",
+      prog:"απαντήθηκαν", miss:"Πρέπει να απαντήσετε ΟΛΕΣ τις ερωτήσεις για να προχωρήσετε.",
+      ancL:"Διαφωνώ", ancR:"Συμφωνώ",
+      resH:"Υψηλό", resL:"Χαμηλό",
+      interpTitle: "Ερμηνεία Προφίλ",
+      hiddenRisk: "Κρυφό Κόστος:",
+      managerTip: "Συμβουλή Διαχείρισης:",
+      pdfBtn: "Λήψη PDF", wordBtn: "Λήψη Word",
+      emailPh: "Συμπληρώστε email για την αναφορά"
     },
     en: {
-      h_title: "Risk is a Narrative",
-      h_text: "Every day you make decisions under pressure. Sometimes instinct saves you, sometimes it traps you. ISRRA does not grade you. It reveals your 'code'. How do you perceive danger? How do you react when everything is uncertain?",
-      start: "START",
-      heroBtn: "Ελληνικά", // Button text on Hero to switch TO Greek
-      toggleBtn: "Ελληνικά",
-      sub: "Risk Perception Questionnaire",
-      calc: "Calculate",
-      reset: "Reset",
-      dimsTitle: "Dimensions",
-      dimsHint: "Answer all items. 1=Disagree, 7=Agree.",
-      resTitle: "Your Profile",
-      planTitle: "SARIM Micro-Plan",
-      planIntro: "Recommended 14-day plan:",
-      missing: "Please answer all questions.",
-      pdfBtn: "Download PDF Results",
-      wordBtn: "Download Word (.doc)",
-      emailHint: "Enter your email. It will appear on the PDF.",
-      anchorL: "Disagree", anchorR: "Agree"
+      hTitle:"Risk is a Narrative", hText:"Discover your profile and get an action plan.", start:"START", hBtn:"Ελληνικά",
+      sub:"Risk Profile & Action", calc:"Calculate & View", reset:"Reset",
+      prog:"answered", miss:"You must answer ALL questions to proceed.",
+      ancL:"Disagree", ancR:"Agree",
+      resH:"High", resL:"Low",
+      interpTitle: "Profile Interpretation",
+      hiddenRisk: "Hidden Cost:",
+      managerTip: "Management Tip:",
+      pdfBtn: "Download PDF", wordBtn: "Download Word",
+      emailPh: "Enter email for the report"
     }
   };
 
-  /* --- STATE MANAGEMENT --- */
-  let currentLang = "el";
-  const answers = JSON.parse(localStorage.getItem("isrra_ans") || "{}");
+  /* --- RICH INTERPRETATION DATA --- */
+  const INTERP = {
+    F: { 
+      H: { el:"Βλέπεις το ρίσκο ως ευκαιρία μάθησης.", en:"You view risk as a learning opportunity." },
+      L: { el:"Βλέπεις το ρίσκο ως απειλή.", en:"You view risk as a threat." }
+    },
+    E: { 
+      H: { el:"Διατηρείς ψυχραιμία υπό πίεση.", en:"You stay calm under pressure." },
+      L: { el:"Το στρες επηρεάζει την κρίση σου.", en:"Stress affects your judgement." }
+    },
+    C: { 
+      H: { el:"Επικοινωνείς με σαφήνεια.", en:"You communicate clearly." },
+      L: { el:"Διστάζεις να μιλήσεις ανοιχτά.", en:"You hesitate to speak up." }
+    },
+    A: { 
+      H: { el:"Αναλαμβάνεις δράση άμεσα.", en:"You take action immediately." },
+      L: { el:"Παραλύεις μπροστά στην αβεβαιότητα.", en:"You freeze in uncertainty." }
+    },
+    S: { 
+      H: { el:"Λειτουργείς ομαδικά.", en:"You act as a team player." },
+      L: { el:"Λειτουργείς ατομικά.", en:"You act individually." }
+    }
+  };
 
-  /* --- INIT --- */
+  /* --- APP STATE --- */
+  let curLang = "el";
+  const answers = JSON.parse(localStorage.getItem("isrra_ans_v3") || "{}");
+
   function init(){
     renderHero();
-    renderDims();
+    renderQuiz();
     updateProgress();
-    setLanguage(currentLang);
+    applyLang(curLang);
   }
 
+  /* --- HERO & LANG --- */
   function renderHero(){
-    // Hero Start Button
-    const startBtn = document.getElementById("startBtn");
-    startBtn.onclick = function() {
-      // Hide Hero
-      const hero = document.getElementById("hero");
+    const hero = document.getElementById("hero");
+    document.getElementById("startBtn").onclick = () => {
       hero.classList.add("closed");
-      
-      // Show App after small delay for transition
-      setTimeout(() => {
-        hero.style.display = 'none'; // Completely remove from layout
-        const app = document.getElementById("appWrap");
-        app.classList.add("visible");
+      setTimeout(()=>{ 
+        hero.style.display="none"; 
+        document.getElementById("appWrap").classList.add("visible");
       }, 500);
     };
-
-    // Hero Language Button
-    document.getElementById("heroLangBtn").addEventListener("click", () => {
-      toggleLanguage();
-    });
+    document.getElementById("heroLangBtn").onclick = toggleLang;
+    document.getElementById("toggleLang").onclick = toggleLang;
   }
 
-  function toggleLanguage(){
-    const newLang = currentLang === 'el' ? 'en' : 'el';
-    setLanguage(newLang);
+  function toggleLang(){
+    curLang = curLang==="el"?"en":"el";
+    applyLang(curLang);
   }
 
-  function setLanguage(l){
-    currentLang = l;
-    const t = LANG[l];
+  function applyLang(l){
+    const t = TEXT[l];
     document.documentElement.lang = l;
     
-    // Hero Elements
-    document.getElementById("h_title").textContent = t.h_title;
-    document.getElementById("h_text").textContent = t.h_text;
+    document.getElementById("h_title").textContent = t.hTitle;
+    document.getElementById("h_text").textContent = t.hText;
     document.getElementById("startBtn").textContent = t.start;
-    document.getElementById("heroLangBtn").textContent = t.heroBtn;
-
-    // App Elements
-    document.getElementById("toggleLang").textContent = t.toggleBtn;
+    document.getElementById("heroLangBtn").textContent = t.hBtn;
+    
     document.getElementById("subTitle").textContent = t.sub;
     document.getElementById("calcBtn").textContent = t.calc;
     document.getElementById("resetBtn").textContent = t.reset;
-    document.getElementById("dimsTitle").textContent = t.dimsTitle;
-    document.getElementById("dimsHint").textContent = t.dimsHint;
-    document.getElementById("resTitle").textContent = t.resTitle;
-    document.getElementById("planTitle").textContent = t.planTitle;
-    document.getElementById("planIntro").textContent = t.planIntro;
     document.getElementById("pdfBtn").textContent = t.pdfBtn;
     document.getElementById("wordBtn").textContent = t.wordBtn;
-    document.getElementById("emailHint").textContent = t.emailHint;
-
-    // Re-render items to update text (questions)
-    renderDims();
+    document.getElementById("userEmail").placeholder = t.emailPh;
+    
+    // Rerender questions to update text
+    renderQuiz();
   }
 
-  function renderDims(){
-    const container = document.getElementById("dimsContainer");
-    container.innerHTML = "";
+  /* --- RENDER QUIZ (Vertical Blocks) --- */
+  function renderQuiz(){
+    const con = document.getElementById("quizContainer");
+    con.innerHTML = "";
     
     DIM.forEach(d => {
-      const box = document.createElement("div");
-      box.className = "dim";
+      const block = document.createElement("div");
+      block.className = "dim-block";
       
       const head = document.createElement("div");
-      head.className = "dim-head";
-      head.innerHTML = `<span>${currentLang==='el'?d.gr:d.en}</span> <span class="dim-code">${d.key}</span>`;
-      
-      const desc = document.createElement("div");
-      desc.className = "hint";
-      desc.textContent = currentLang==='el'?d.descEl:d.descEn;
-
-      box.appendChild(head);
-      box.appendChild(desc);
+      head.className = "dim-header";
+      head.innerHTML = `
+        <h3 class="dim-title">${curLang==='el'?d.gr:d.en} (${d.key})</h3>
+        <p class="dim-desc">${curLang==='el'?d.dGr:d.dEn}</p>
+      `;
+      block.appendChild(head);
 
       const items = ITEMS[d.key];
       items.forEach((it, idx) => {
         const qid = `${d.key}_${idx+1}`;
         const row = document.createElement("div");
-        row.className = "item";
+        row.className = "item-row";
         
-        const qText = document.createElement("p");
-        qText.className = "item-q";
-        qText.textContent = `${idx+1}. ${currentLang==='el'?it.gr:it.en}`;
-        row.appendChild(qText);
-
+        // Check if answered for mandatory mark (optional visual cue)
+        const isAns = answers[qid] !== undefined;
+        
+        row.innerHTML = `<span class="q-text">
+          <strong>${idx+1}.</strong> ${curLang==='el'?it.gr:it.en}
+          <span class="required-mark">*</span>
+        </span>`;
+        
         const likert = document.createElement("div");
-        likert.className = "likert";
+        likert.className = "likert-scale";
         
         [1,2,3,4,5,6,7].forEach(val => {
-          const lbl = document.createElement("label");
-          lbl.className = "opt";
-          const inp = document.createElement("input");
-          inp.type = "radio";
-          inp.name = qid;
-          inp.value = val;
-          if(answers[qid] == val) inp.checked = true;
+          const opt = document.createElement("label");
+          opt.className = "likert-opt";
+          const chk = (answers[qid] === val) ? "checked" : "";
           
-          inp.addEventListener("change", (e)=>{
-             answers[qid] = parseInt(e.target.value);
-             localStorage.setItem("isrra_ans", JSON.stringify(answers));
-             updateProgress();
+          opt.innerHTML = `
+            <input type="radio" name="${qid}" value="${val}" ${chk}>
+            <span class="likert-val">${val}</span>
+          `;
+          
+          opt.querySelector("input").addEventListener("change", (e)=>{
+            answers[qid] = parseInt(e.target.value);
+            localStorage.setItem("isrra_ans_v3", JSON.stringify(answers));
+            updateProgress();
           });
-
-          const ui = document.createElement("div");
-          ui.textContent = val;
-          
-          lbl.appendChild(inp);
-          lbl.appendChild(ui);
-          likert.appendChild(lbl);
+          likert.appendChild(opt);
         });
 
         row.appendChild(likert);
         
-        const anchors = document.createElement("div");
-        anchors.className = "anchors";
-        anchors.innerHTML = `<span>${LANG[currentLang].anchorL}</span><span>${LANG[currentLang].anchorR}</span>`;
-        row.appendChild(anchors);
+        const anchorDiv = document.createElement("div");
+        anchorDiv.className = "anchors";
+        anchorDiv.innerHTML = `<span>${TEXT[curLang].ancL}</span><span>${TEXT[curLang].ancR}</span>`;
+        row.appendChild(anchorDiv);
 
-        box.appendChild(row);
+        block.appendChild(row);
       });
       
-      container.appendChild(box);
+      con.appendChild(block);
     });
   }
 
   function updateProgress(){
-    const total = 50; // 5 dims * 10 items
-    const answered = Object.keys(answers).length;
-    const pct = Math.round((answered/total)*100);
+    const done = Object.keys(answers).length;
+    const total = 50;
+    const pct = Math.round((done/total)*100);
     document.getElementById("bar").style.width = pct+"%";
-    document.getElementById("progTxt").textContent = `${answered}/${total}`;
+    document.getElementById("progTxt").textContent = `${done}/${total} ${TEXT[curLang].prog}`;
   }
 
-  /* --- CALCULATION LOGIC --- */
-  function calculate(){
-    const totalAnswered = Object.keys(answers).length;
-    if(totalAnswered < 50){
-      alert(LANG[currentLang].missing);
+  /* --- CALCULATION & INTERPRETATION --- */
+  document.getElementById("calcBtn").onclick = () => {
+    const done = Object.keys(answers).length;
+    const err = document.getElementById("errorMsg");
+    if(done < 50){
+      err.style.display = "block";
+      err.textContent = TEXT[curLang].miss;
       return;
     }
-
-    const scores = {};
-    const states = {}; 
+    err.style.display = "none";
     
+    // Calculate
+    const scores = {};
+    const states = {};
     DIM.forEach(d => {
       let sum = 0;
       for(let i=1; i<=10; i++){
-        let val = answers[`${d.key}_${i}`];
-        // Reverse Logic
-        if(REVERSE[d.key].includes(i)){
-          val = 8 - val;
-        }
-        sum += val;
+        let v = answers[`${d.key}_${i}`];
+        if(REVERSE[d.key].includes(i)) v = 8 - v;
+        sum += v;
       }
-      const mean = sum / 10;
-      scores[d.key] = mean;
-      // LOGIC: If mean >= 4.0 -> High (Uppercase), else Low
-      states[d.key] = mean >= 4.0 ? "H" : "L"; 
+      scores[d.key] = sum/10;
+      states[d.key] = (sum/10) >= 4.0 ? "H" : "L";
     });
 
-    displayResults(scores, states);
-  }
-
-  function displayResults(scores, states){
-    document.getElementById("results").classList.add("show");
+    // Generate Outputs
+    const code = DIM.map(d => states[d.key]==="H"?d.key:d.key.toLowerCase()).join("");
+    document.getElementById("resCode").textContent = code;
     
-    // 1. Profile Code (FECAS)
-    let codeStr = "";
-    ["F","E","C","A","S"].forEach(k => {
-      codeStr += (states[k] === "H" ? k : k.toLowerCase());
-    });
-    document.getElementById("profileCode").textContent = codeStr;
+    // Name construction
+    const sS = states.S==="H" ? (curLang==='el'?"Ομαδικός":"Team") : (curLang==='el'?"Ατομικός":"Solo");
+    const sF = states.F==="H" ? (curLang==='el'?"Στρατηγικός":"Strategic") : (curLang==='el'?"Αμυντικός":"Defensive");
+    document.getElementById("resName").textContent = `${sS}, ${sF}`;
 
-    // 2. Profile Name
-    const pNameEl = (states.S==="H"?"Ομαδικός":"Μοναχικός") + ", " + (states.F==="H"?"Στρατηγικός":"Αμυντικός");
-    const pNameEn = (states.S==="H"?"Team-based":"Solo") + ", " + (states.F==="H"?"Strategic":"Defensive");
-    document.getElementById("profileName").textContent = currentLang==='el' ? pNameEl : pNameEn;
-
-    // 3. KPI Grid
-    const kpiWrap = document.getElementById("kpiGrid");
-    kpiWrap.innerHTML = "";
+    // Rich Interpretation
+    let explHTML = "";
     DIM.forEach(d => {
-      const div = document.createElement("div");
-      div.className = "kpi-box";
-      const sVal = scores[d.key].toFixed(1);
-      const sState = states[d.key];
-      div.innerHTML = `
-        <div style="font-size:0.8rem; color:#aaa;">${d.key}</div>
-        <div class="kpi-val">${sVal}</div>
-        <span class="tag ${sState}">${sState==="H" ? "High" : "Low"}</span>
-      `;
-      kpiWrap.appendChild(div);
+      const st = states[d.key];
+      const txt = INTERP[d.key][st][curLang];
+      explHTML += `<strong>${d.key}:</strong> ${txt} `;
+    });
+    // Add "Hidden Cost" logic based on lowest score
+    let minKey = "F"; let minVal = 10;
+    Object.entries(scores).forEach(([k,v])=>{ if(v<minVal){ minVal=v; minKey=k; } });
+    
+    const hiddenMap = {
+      F: {el:"Δυσκολία προσαρμογής σε αλλαγές.", en:"Difficulty adapting to change."},
+      E: {el:"Πιθανά λάθη λόγω άγχους.", en:"Potential errors due to anxiety."},
+      C: {el:"Παρεξηγήσεις στην ομάδα.", en:"Team misunderstandings."},
+      A: {el:"Καθυστερήσεις στην εκτέλεση.", en:"Execution delays."},
+      S: {el:"Έλλειψη αναφορών ασφαλείας.", en:"Lack of safety reporting."}
+    };
+    
+    explHTML += `<br><br><strong>${TEXT[curLang].hiddenRisk}</strong> ${hiddenMap[minKey][curLang]}`;
+    document.getElementById("resExpl").innerHTML = explHTML;
+
+    // Table
+    const tbody = document.getElementById("kpiBody");
+    tbody.innerHTML = "";
+    DIM.forEach(d => {
+      const st = states[d.key];
+      const cls = st==="H"?"tag-h":"tag-l";
+      const lbl = st==="H"?TEXT[curLang].resH:TEXT[curLang].resL;
+      const row = `<tr>
+        <td>${curLang==='el'?d.gr:d.en}</td>
+        <td>${scores[d.key].toFixed(1)}</td>
+        <td><span class="${cls}">${lbl}</span></td>
+      </tr>`;
+      tbody.innerHTML += row;
     });
 
-    // 4. Micro Plan
-    generatePlan(states);
+    // Plan
+    const plan = curLang==='el' 
+      ? "1. Καταγραφή: Για 3 μέρες σημείωσε τι σε δυσκόλεψε.\n2. Μικρή Αλλαγή: Διάλεξε τη διάσταση με το χαμηλότερο σκορ και κάνε μία ενέργεια.\n3. Feedback: Ρώτα έναν συνάδελφο πώς σε βλέπει."
+      : "1. Log: For 3 days note what challenged you.\n2. Small Shift: Pick your lowest score dimension and do one action.\n3. Feedback: Ask a peer for perspective.";
+    document.getElementById("planText").textContent = plan;
 
-    // Scroll
-    setTimeout(()=>{
-      document.getElementById("results").scrollIntoView({behavior:"smooth"});
-    }, 100);
-  }
+    // Show
+    document.getElementById("resultsSection").classList.add("show");
+    setTimeout(()=> document.getElementById("resultsSection").scrollIntoView({behavior:"smooth"}), 200);
+  };
 
-  function generatePlan(states){
-    const isEl = currentLang === 'el';
-    let txt = "";
+  document.getElementById("resetBtn").onclick = () => {
+    if(confirm("Reset all?")) { localStorage.removeItem("isrra_ans_v3"); location.reload(); }
+  };
 
-    // General Step
-    txt += isEl ? "1. Καταγραφή (3 μέρες): Κατάγραψε πότε νιώθεις αβεβαιότητα.\n" : "1. Log (3 days): Record when you feel uncertainty.\n";
-    
-    // Specifics based on low scores
-    if(states.F === "L"){
-      txt += isEl ? "2. Πλαισίωση: Άλλαξε τη λέξη 'απειλή' με τη λέξη 'πρόκληση' σε ένα email.\n" : "2. Framing: Replace 'threat' with 'challenge' in one email.\n";
-    }
-    if(states.E === "L"){
-      txt += isEl ? "3. Φίλτρο: Πριν απαντήσεις, πάρε 3 βαθιές ανάσες (κανόνας 5 δευτερολέπτων).\n" : "3. Filter: Take 3 breaths before replying (5-second rule).\n";
-    }
-    if(states.C === "L"){
-      txt += isEl ? "4. Επικοινωνία: Χρησιμοποίησε τη δομή 'Γεγονός -> Ερμηνεία -> Πρόταση'.\n" : "4. Comms: Use the structure 'Fact -> Interpretation -> Proposal'.\n";
-    }
-    
-    // Feedback Loop
-    txt += isEl ? "5. Feedback: Ζήτησε από έναν συνάδελφο να σου πει τι παρατήρησε." : "5. Feedback: Ask a colleague what they observed.";
-
-    document.getElementById("microPlanBody").textContent = txt;
-  }
-
-  /* --- EXPORT FUNCTIONS --- */
-  
-  // PDF Export
-  document.getElementById("pdfBtn").addEventListener("click", ()=>{
-    const el = document.getElementById("printArea");
+  /* --- EXPORT --- */
+  document.getElementById("pdfBtn").onclick = () => {
+    const el = document.getElementById("printContainer");
     const email = document.getElementById("userEmail").value || "user";
     
-    document.getElementById("printDate").textContent = new Date().toLocaleString();
-    document.getElementById("printEmail").textContent = email;
-    document.querySelector(".print-only").style.display = "block";
+    document.getElementById("printDate").textContent = new Date().toLocaleDateString();
+    document.getElementById("printEmailDisplay").textContent = email;
 
     const opt = {
-      margin:       10,
-      filename:     `ISRRA_Result_${email}.pdf`,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true },
-      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      margin: 10,
+      filename: `ISRRA_${email}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
+    // Element is visible now, so html2pdf should grab it
+    html2pdf().set(opt).from(el).save();
+  };
 
-    html2pdf().set(opt).from(el).save().then(()=>{
-       document.querySelector(".print-only").style.display = "none";
-    });
-  });
-
-  // Word Export
-  document.getElementById("wordBtn").addEventListener("click", ()=>{
-    const content = document.getElementById("printArea").innerHTML;
+  document.getElementById("wordBtn").onclick = () => {
+    const content = document.getElementById("printContainer").innerHTML;
     const email = document.getElementById("userEmail").value || "user";
-
-    const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML to Word</title></head><body>";
+    const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'><head><meta charset='utf-8'></head><body>";
     const footer = "</body></html>";
     const sourceHTML = header + content + footer;
-
-    const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
     
-    const fileDownload = document.createElement("a");
-    document.body.appendChild(fileDownload);
-    fileDownload.href = source;
-    fileDownload.download = `ISRRA_Result_${email}.doc`;
-    fileDownload.click();
-    document.body.removeChild(fileDownload);
-  });
+    const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+    const link = document.createElement("a");
+    document.body.appendChild(link);
+    link.href = source;
+    link.download = `ISRRA_${email}.doc`;
+    link.click();
+    document.body.removeChild(link);
+  };
 
-  /* --- EVENT LISTENERS --- */
-  document.getElementById("toggleLang").addEventListener("click", toggleLanguage);
-  document.getElementById("calcBtn").addEventListener("click", calculate);
-  document.getElementById("resetBtn").addEventListener("click", ()=>{
-    if(confirm("Reset all answers?")){
-      localStorage.removeItem("isrra_ans");
-      location.reload();
-    }
-  });
-
-  // Run Init
-  window.addEventListener('DOMContentLoaded', init);
-
+  init();
 </script>
 </body>
 </html>
